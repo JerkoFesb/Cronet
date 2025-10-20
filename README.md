@@ -24,7 +24,7 @@
 
 ### Semester Assignments
 
-- Link to Assignment 1: [**Assignment 1**](URL_TO_ASSIGNMENT_1) <!-- Replace with actual URL -->
+- Link to Assignment 1: [**Assignment 1**](https://www.canva.com/design/DAG2JPzS9Jo/FyVmrValp3EqBRJj5dSqlw/edit?utm_content=DAG2JPzS9Jo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 - Link to Assignment 2: [**Assignment 2**](URL_TO_ASSIGNMENT_2) <!-- Replace with actual URL -->
 - Link to Assignment 3: [**Assignment 3**](URL_TO_ASSIGNMENT_3) <!-- Replace with actual URL -->
 <!-- Add more assignments as necessary -->
