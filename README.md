@@ -26,7 +26,7 @@
 
 - Link to Assignment 1: [**Assignment 1**](https://github.com/JerkoFesb/Cronet/tree/main/ProjectAssignments/Idea%20Pitch)
 - Link to Assignment 2: [**Assignment 2**](https://github.com/JerkoFesb/Cronet/tree/main/ProjectAssignments/user_personas_info_architecture)
-- Link to Assignment 3: [**Assignment 2**](cronet.vercel.app)
+- Link to Assignment 3: [**Assignment 3**](https://cronet.vercel.app)
 <!-- Add more assignments as necessary -->
 
 ## Project Requirements
