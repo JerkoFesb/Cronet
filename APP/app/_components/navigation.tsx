@@ -9,10 +9,9 @@ type Page = {
 
 const pages: Page[] = [
   { title: "Početna", path: "/" },
-  { title: "Mreže za vas", path: "/mreze" },
-  { title: "Pomoć", path: "/help" },
-  { title: "Moj račun", path: "/racun" },
-  { title: "O nama", path: "/info" },
+  { title: "Pretraga", path: "/pretraga" },
+  { title: "Pomoć", path: "/pomoc" },
+  { title: "Prijava", path: "/prijava" },
 ];
 
 function processPage(page: Page, index: number, currentPath?: string) {
