@@ -26,6 +26,8 @@
 
 - Link to Assignment 1: [**Assignment 1**](https://github.com/JerkoFesb/Cronet/tree/main/ProjectAssignments/Idea%20Pitch)
 - Link to Assignment 2: [**Assignment 2**](https://github.com/JerkoFesb/Cronet/tree/main/ProjectAssignments/user_personas_info_architecture)
+- Link to Assignment 4: [**Assignment 4**](https://github.com/JerkoFesb/Cronet/tree/main/ProjectAssignments/figma)
+- Link to Assignment 5: [**Assignment 5**](https://github.com/JerkoFesb/Cronet/tree/main/ProjectAssignments/Task5)
 <!-- Add more assignments as necessary -->
 
 ## Project Requirements
