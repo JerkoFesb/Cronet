@@ -29,7 +29,7 @@
 - Link to Assignment 4: [**Assignment 4**](https://github.com/JerkoFesb/Cronet/tree/main/ProjectAssignments/figma)
 - Link to Assignment 5: [**Assignment 5**](https://github.com/JerkoFesb/Cronet/tree/main/ProjectAssignments/Task5)
 <!-- Add more assignments as necessary -->
-- Link to Assignment 6: [**Assignment 6**](https://github.com/JerkoFesb/Cronet/tree/main/ProjectAssignments/Task 6)
+- Link to Assignment 6: [**Assignment 6**](https://github.com/JerkoFesb/Cronet/tree/main/ProjectAssignments/Task%206)
 <!-- Add more assignments as necessary -->
 
 
