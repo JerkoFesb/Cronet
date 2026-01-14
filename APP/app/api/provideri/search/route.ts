@@ -68,29 +68,31 @@ export async function GET(req: Request) {
       conditions.push(ilike(provideri.providerName, `%${provider}%`));
     }
 
-    // Query
-    let query = db
+    // Determine sort order
+    let orderByClause;
+    if (sortBy === "price") {
+      orderByClause = asc(provideri.priceEur);
+    } else if (sortBy === "speed") {
+      orderByClause = desc(provideri.downloadMbps);
+    } else if (sortBy === "gaming") {
+      orderByClause = desc(provideri.scoreGaming);
+    } else if (sortBy === "streaming") {
+      orderByClause = desc(provideri.scoreStreaming);
+    } else if (sortBy === "work") {
+      orderByClause = desc(provideri.scoreWork);
+    } else if (sortBy === "family") {
+      orderByClause = desc(provideri.scoreFamily);
+    } else {
+      orderByClause = asc(provideri.priceEur); // default
+    }
+
+    // Query with ordering built-in
+    const results = await db
       .select()
       .from(provideri)
       .where(conditions.length > 0 ? and(...conditions) : undefined)
+      .orderBy(orderByClause)
       .limit(limit);
-
-    // Sorting
-    if (sortBy === "price") {
-      query = query.orderBy(asc(provideri.priceEur));
-    } else if (sortBy === "speed") {
-      query = query.orderBy(desc(provideri.downloadMbps));
-    } else if (sortBy === "gaming") {
-      query = query.orderBy(desc(provideri.scoreGaming));
-    } else if (sortBy === "streaming") {
-      query = query.orderBy(desc(provideri.scoreStreaming));
-    } else if (sortBy === "work") {
-      query = query.orderBy(desc(provideri.scoreWork));
-    } else if (sortBy === "family") {
-      query = query.orderBy(desc(provideri.scoreFamily));
-    }
-
-    const results = await query;
 
     console.log(`[Provideri API] Found ${results.length} results`);
 
