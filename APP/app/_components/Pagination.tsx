@@ -42,8 +42,8 @@ export const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className={`w-full max-w-2xl mb-6 ${className}`}>
-      <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 flex justify-between items-center">
+    <div className={`w-full flex justify-center mb-6 ${className}`}>
+      <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 flex justify-between items-center w-full max-w-2xl">
         <button
           onClick={handlePrev}
           className={`px-4 py-2 rounded-md transition-colors duration-200 ${

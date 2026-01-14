@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1766952912628,
+      "tag": "0000_freezing_black_bolt",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1767010599819,
+      "tag": "0001_melted_kitty_pryde",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1767287653325,
+      "tag": "0002_blue_layla_miller",
+      "breakpoints": true
+    }
+  ]
+}

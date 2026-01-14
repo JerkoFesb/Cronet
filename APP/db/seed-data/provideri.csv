@@ -1,0 +1,65 @@
+id,providerName,packageName,city,region,accessType,downloadMbps,uploadMbps,latencyMs,jitterMs,packetLossPercent,cgnat,ipv6Support,priceEur,installationFeeEur,contractMonths,dataLimitGB,tvIncluded,phoneIncluded,routerIncluded,scoreGaming,scoreStreaming,scoreWork,scoreFamily,availability,promotionActive,promotionDescription,websiteUrl
+a1-zg-opt-200,A1,Optika 200,Zagreb,Sjeverna Hrvatska,FTTH,200,100,8,1,0.01,false,true,29.99,0,24,,false,false,true,9,9,9,8,excellent,true,Besplatna instalacija do kraja mjeseca,https://www.a1.hr
+a1-zg-opt-500,A1,Optika 500,Zagreb,Sjeverna Hrvatska,FTTH,500,250,7,1,0.01,false,true,39.99,0,24,,false,false,true,10,10,10,9,excellent,false,,https://www.a1.hr
+a1-zg-opt-1000,A1,Gigabit Optika,Zagreb,Sjeverna Hrvatska,FTTH,1000,500,6,1,0.01,false,true,49.99,0,24,,false,false,true,10,10,10,10,excellent,false,,https://www.a1.hr
+a1-spl-opt-200,A1,Optika 200,Split,Dalmacija,FTTH,200,100,10,2,0.01,false,true,29.99,0,24,,false,false,true,9,9,9,8,excellent,false,,https://www.a1.hr
+a1-spl-opt-500,A1,Optika 500,Split,Dalmacija,FTTH,500,250,9,1,0.01,false,true,39.99,0,24,,false,false,true,10,10,10,9,excellent,false,,https://www.a1.hr
+a1-rij-opt-200,A1,Optika 200,Rijeka,Primorje,FTTH,200,100,9,1,0.01,false,true,29.99,0,24,,false,false,true,9,9,9,8,excellent,false,,https://www.a1.hr
+a1-osj-opt-100,A1,Optika 100,Osijek,Slavonija,FTTH,100,50,12,2,0.02,false,true,24.99,0,24,,false,false,true,8,8,8,7,good,false,,https://www.a1.hr
+a1-zg-5g-home,A1,5G Home Internet,Zagreb,Sjeverna Hrvatska,5G,300,50,15,5,0.2,true,false,34.99,0,0,,false,false,true,6,8,7,7,good,true,Prvi mjesec besplatno,https://www.a1.hr
+ht-zg-opt-300,Hrvatski Telekom,MAX Optika 300,Zagreb,Sjeverna Hrvatska,FTTH,300,150,7,1,0.01,false,true,34.99,99,24,,true,true,true,9,9,9,9,excellent,false,,https://www.t.ht.hr
+ht-zg-opt-500,Hrvatski Telekom,MAX Optika 500,Zagreb,Sjeverna Hrvatska,FTTH,500,250,6,1,0.01,false,true,44.99,99,24,,true,true,true,10,10,10,10,excellent,false,,https://www.t.ht.hr
+ht-zg-opt-1000,Hrvatski Telekom,MAX Gigabit,Zagreb,Sjeverna Hrvatska,FTTH,1000,500,5,1,0.01,false,true,54.99,99,24,,true,true,true,10,10,10,10,excellent,false,,https://www.t.ht.hr
+ht-spl-opt-300,Hrvatski Telekom,MAX Optika 300,Split,Dalmacija,FTTH,300,150,8,1,0.01,false,true,34.99,99,24,,true,true,true,9,9,9,9,excellent,false,,https://www.t.ht.hr
+ht-spl-opt-500,Hrvatski Telekom,MAX Optika 500,Split,Dalmacija,FTTH,500,250,7,1,0.01,false,true,44.99,99,24,,true,true,true,10,10,10,10,excellent,false,,https://www.t.ht.hr
+ht-rij-opt-300,Hrvatski Telekom,MAX Optika 300,Rijeka,Primorje,FTTH,300,150,8,1,0.01,false,true,34.99,99,24,,true,true,true,9,9,9,9,excellent,false,,https://www.t.ht.hr
+ht-osj-adsl-24,Hrvatski Telekom,ADSL MAX,Osijek,Slavonija,DSL,24,4,45,10,0.5,false,false,19.99,49,12,,false,true,true,3,4,5,4,good,false,,https://www.t.ht.hr
+ht-zag-adsl-16,Hrvatski Telekom,ADSL Basic,Zagreb,Sjeverna Hrvatska,DSL,16,2,50,12,0.8,false,false,16.99,49,12,,false,false,true,2,3,4,3,limited,false,,https://www.t.ht.hr
+telemach-zg-opt-200,Telemach,MEGA Speed 200,Zagreb,Sjeverna Hrvatska,FTTH,200,100,9,2,0.02,false,true,27.99,0,12,,false,false,true,8,9,8,8,excellent,true,Bez instalacije,https://www.telemach.hr
+telemach-zg-opt-500,Telemach,MEGA Speed 500,Zagreb,Sjeverna Hrvatska,FTTH,500,250,8,1,0.01,false,true,37.99,0,12,,false,false,true,9,10,9,9,excellent,false,,https://www.telemach.hr
+telemach-zg-kab-250,Telemach,Kabel 250,Zagreb,Sjeverna Hrvatska,DOCSIS,250,25,12,3,0.05,false,true,24.99,0,12,,true,false,true,7,8,7,8,excellent,false,,https://www.telemach.hr
+telemach-spl-opt-200,Telemach,MEGA Speed 200,Split,Dalmacija,FTTH,200,100,11,2,0.02,false,true,27.99,0,12,,false,false,true,8,9,8,8,excellent,false,,https://www.telemach.hr
+telemach-spl-kab-150,Telemach,Kabel 150,Split,Dalmacija,DOCSIS,150,15,15,4,0.1,false,true,22.99,0,12,,true,false,true,6,7,6,7,good,false,,https://www.telemach.hr
+telemach-rij-opt-300,Telemach,MEGA Speed 300,Rijeka,Primorje,FTTH,300,150,10,2,0.02,false,true,32.99,0,12,,false,false,true,9,9,9,9,excellent,false,,https://www.telemach.hr
+telemach-pul-kab-100,Telemach,Kabel 100,Pula,Istra,DOCSIS,100,10,18,5,0.15,false,false,19.99,0,12,,true,false,true,5,6,5,6,good,false,,https://www.telemach.hr
+iskon-zg-opt-200,Iskon,Optika 200,Zagreb,Sjeverna Hrvatska,FTTH,200,100,10,2,0.02,false,true,26.99,0,12,,false,false,true,8,9,8,8,excellent,true,Bez ugovorne obveze,https://www.iskon.hr
+iskon-zg-opt-500,Iskon,Optika 500,Zagreb,Sjeverna Hrvatska,FTTH,500,250,9,1,0.01,false,true,36.99,0,12,,false,false,true,9,10,9,9,excellent,false,,https://www.iskon.hr
+iskon-zg-kab-100,Iskon,Kabel 100,Zagreb,Sjeverna Hrvatska,DOCSIS,100,10,15,4,0.08,false,false,21.99,0,0,,false,false,true,6,7,6,7,good,false,,https://www.iskon.hr
+iskon-spl-opt-200,Iskon,Optika 200,Split,Dalmacija,FTTH,200,100,12,2,0.02,false,true,26.99,0,12,,false,false,true,8,9,8,8,good,false,,https://www.iskon.hr
+iskon-rij-opt-200,Iskon,Optika 200,Rijeka,Primorje,FTTH,200,100,11,2,0.02,false,true,26.99,0,12,,false,false,true,8,9,8,8,excellent,false,,https://www.iskon.hr
+evo-zg-opt-100,Evo,Optika 100,Zagreb,Sjeverna Hrvatska,FTTH,100,50,12,3,0.03,false,false,18.99,0,0,,false,false,false,7,7,7,6,good,true,Bez instalacije i ugovora,https://www.evo.hr
+evo-zg-opt-200,Evo,Optika 200,Zagreb,Sjeverna Hrvatska,FTTH,200,100,11,2,0.02,false,false,24.99,0,0,,false,false,false,8,8,8,7,good,false,,https://www.evo.hr
+evo-spl-opt-100,Evo,Optika 100,Split,Dalmacija,FTTH,100,50,14,3,0.03,false,false,18.99,0,0,,false,false,false,7,7,7,6,good,false,,https://www.evo.hr
+evo-osj-opt-100,Evo,Optika 100,Osijek,Slavonija,FTTH,100,50,15,4,0.04,false,false,18.99,0,0,,false,false,false,7,7,7,6,limited,false,,https://www.evo.hr
+optima-zg-opt-300,Optima Telekom,Optika 300,Zagreb,Sjeverna Hrvatska,FTTH,300,150,9,2,0.02,false,true,31.99,0,24,,true,false,true,8,9,8,8,excellent,false,,https://www.optima.hr
+optima-zg-kab-200,Optima Telekom,Kabel 200,Zagreb,Sjeverna Hrvatska,DOCSIS,200,20,13,3,0.06,false,true,26.99,0,24,,true,false,true,7,8,7,8,excellent,false,,https://www.optima.hr
+optima-spl-opt-200,Optima Telekom,Optika 200,Split,Dalmacija,FTTH,200,100,11,2,0.02,false,true,28.99,0,24,,true,false,true,8,9,8,8,good,false,,https://www.optima.hr
+optima-rij-kab-150,Optima Telekom,Kabel 150,Rijeka,Primorje,DOCSIS,150,15,16,4,0.08,false,false,23.99,0,24,,true,false,true,6,7,6,7,good,false,,https://www.optima.hr
+bonbon-zg-mobile,Bonbon,5G Kućni Internet,Zagreb,Sjeverna Hrvatska,5G,150,30,20,8,0.3,true,false,19.99,0,0,300,false,false,true,5,7,6,6,good,true,3 mjeseca po 9.99€,https://www.bonbon.hr
+bonbon-spl-mobile,Bonbon,5G Kućni Internet,Split,Dalmacija,5G,120,25,25,10,0.4,true,false,19.99,0,0,300,false,false,true,4,6,5,5,good,false,,https://www.bonbon.hr
+tele2-zg-mobile,Tele2,4G/5G Home,Zagreb,Sjeverna Hrvatska,5G,100,20,22,9,0.35,true,false,22.99,0,0,,false,false,true,5,6,5,5,good,false,,https://www.tele2.hr
+tele2-spl-mobile,Tele2,4G/5G Home,Split,Dalmacija,5G,80,15,28,12,0.45,true,false,22.99,0,0,,false,false,true,4,5,4,4,limited,false,,https://www.tele2.hr
+metronet-zg-opt-300,Metronet,Optika 300,Zagreb,Sjeverna Hrvatska,FTTH,300,150,8,1,0.01,false,true,29.99,0,12,,false,false,true,9,9,9,8,good,true,Lokalni provider - odlična podrška,https://www.metronet.hr
+metronet-zg-opt-500,Metronet,Optika 500,Zagreb,Sjeverna Hrvatska,FTTH,500,250,7,1,0.01,false,true,39.99,0,12,,false,false,true,10,10,10,9,good,false,,https://www.metronet.hr
+bnet-zg-opt-200,B.net,Optika 200,Zagreb,Sjeverna Hrvatska,FTTH,200,100,10,2,0.02,false,true,25.99,0,12,,false,false,true,8,9,8,8,good,false,,https://www.bnet.hr
+bnet-zg-opt-1000,B.net,Gigabit,Zagreb,Sjeverna Hrvatska,FTTH,1000,500,7,1,0.01,false,true,44.99,0,12,,false,false,true,10,10,10,10,good,true,Akcija - bez instalacije,https://www.bnet.hr
+a1-zad-opt-200,A1,Optika 200,Zadar,Dalmacija,FTTH,200,100,10,2,0.02,false,true,29.99,0,24,,false,false,true,9,9,9,8,excellent,false,,https://www.a1.hr
+ht-zad-opt-300,Hrvatski Telekom,MAX Optika 300,Zadar,Dalmacija,FTTH,300,150,8,1,0.01,false,true,34.99,99,24,,true,true,true,9,9,9,9,excellent,false,,https://www.t.ht.hr
+telemach-zad-kab-150,Telemach,Kabel 150,Zadar,Dalmacija,DOCSIS,150,15,15,4,0.1,false,true,22.99,0,12,,true,false,true,6,7,6,7,good,false,,https://www.telemach.hr
+bonbon-zad-5g,Bonbon,5G Kućni Internet,Zadar,Dalmacija,5G,120,25,24,9,0.35,true,false,19.99,0,0,300,false,false,true,4,6,5,5,good,false,,https://www.bonbon.hr
+a1-sib-opt-200,A1,Optika 200,Šibenik,Dalmacija,FTTH,200,100,11,2,0.02,false,true,29.99,0,24,,false,false,true,9,9,9,8,good,false,,https://www.a1.hr
+ht-sib-opt-300,Hrvatski Telekom,MAX Optika 300,Šibenik,Dalmacija,FTTH,300,150,9,1,0.01,false,true,34.99,99,24,,true,true,true,9,9,9,9,good,false,,https://www.t.ht.hr
+a1-mak-5g,A1,5G Home Internet,Makarska,Dalmacija,5G,250,40,20,7,0.3,true,false,34.99,0,0,,false,false,true,6,7,7,6,good,false,,https://www.a1.hr
+ht-dub-opt-500,Hrvatski Telekom,MAX Optika 500,Dubrovnik,Dalmacija,FTTH,500,250,8,1,0.01,false,true,44.99,99,24,,true,true,true,10,10,10,10,excellent,false,,https://www.t.ht.hr
+a1-pore-opt-200,A1,Optika 200,Poreč,Istra,FTTH,200,100,10,2,0.02,false,true,29.99,0,24,,false,false,true,9,9,9,8,good,false,,https://www.a1.hr
+ht-rov-opt-300,Hrvatski Telekom,MAX Optika 300,Rovinj,Istra,FTTH,300,150,9,1,0.01,false,true,34.99,99,24,,true,true,true,9,9,9,9,good,false,,https://www.t.ht.hr
+telemach-uma-kab-150,Telemach,Kabel 150,Umag,Istra,DOCSIS,150,15,16,4,0.1,false,true,22.99,0,12,,true,false,true,6,7,6,7,good,false,,https://www.telemach.hr
+bonbon-paz-5g,Bonbon,5G Kućni Internet,Pazin,Istra,5G,100,20,26,10,0.4,true,false,19.99,0,0,300,false,false,true,4,5,4,4,limited,false,,https://www.bonbon.hr
+a1-slb-opt-200,A1,Optika 200,Slavonski Brod,Slavonija,FTTH,200,100,11,2,0.02,false,true,29.99,0,24,,false,false,true,9,9,9,8,good,false,,https://www.a1.hr
+ht-vin-opt-300,Hrvatski Telekom,MAX Optika 300,Vinkovci,Slavonija,FTTH,300,150,9,1,0.01,false,true,34.99,99,24,,true,true,true,9,9,9,9,good,false,,https://www.t.ht.hr
+ht-vuk-adsl,Hrvatski Telekom,ADSL MAX,Vukovar,Slavonija,DSL,20,3,42,9,0.6,false,false,19.99,49,12,,false,true,true,3,4,5,4,limited,false,,https://www.t.ht.hr
+bonbon-dja-5g,Bonbon,5G Kućni Internet,Đakovo,Slavonija,5G,120,25,25,9,0.35,true,false,19.99,0,0,300,false,false,true,4,6,5,5,good,false,,https://www.bonbon.hr
+a1-var-opt-200,A1,Optika 200,Varaždin,Sjeverna Hrvatska,FTTH,200,100,9,1,0.01,false,true,29.99,0,24,,false,false,true,9,9,9,8,excellent,false,,https://www.a1.hr
+ht-cak-opt-300,Hrvatski Telekom,MAX Optika 300,Čakovec,Sjeverna Hrvatska,FTTH,300,150,8,1,0.01,false,true,34.99,99,24,,true,true,true,9,9,9,9,excellent,false,,https://www.t.ht.hr
+telemach-kop-kab-150,Telemach,Kabel 150,Koprivnica,Sjeverna Hrvatska,DOCSIS,150,15,14,4,0.08,false,true,22.99,0,12,,true,false,true,6,7,6,7,good,false,,https://www.telemach.hr
+bonbon-sam-5g,Bonbon,5G Kućni Internet,Samobor,Središnja Hrvatska,5G,150,30,22,8,0.3,true,false,19.99,0,0,300,false,false,true,5,6,6,6,good,false,,https://www.bonbon.hr
