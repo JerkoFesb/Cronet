@@ -2,6 +2,7 @@ import Toast from "@/app/_components/Toast";
 import Link from "next/link";
 import { Suspense } from "react";
 import { PrefetchProviders } from "@/app/_components/PrefetchProviders";
+import TypewriterText from "@/app/_components/TypewriterText";
 
 function HomeContent() {
   return (
@@ -21,7 +22,10 @@ function HomeContent() {
             </div>
             
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-              Ne ostavljaj svoj internet slučaju - pronađi najbolji paket za svoj dom u samo par klikova.
+              <TypewriterText 
+                text="Ne ostavljaj svoj internet slučaju - pronađi najbolji paket za svoj dom u samo par klikova."
+                speed={40}
+              />
             </h1>
             
             <p className="text-sm sm:text-base text-gray-700 leading-relaxed">

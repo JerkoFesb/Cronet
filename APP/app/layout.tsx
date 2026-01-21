@@ -3,6 +3,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "./_components/navigation";
+import { FloatingChatWrapper } from "./_components/FloatingChatWrapper";
 import { AuthProvider } from "./_providers/AuthProvider";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
@@ -50,6 +51,8 @@ export default async function RootLayout({
           <main className="pt-20">
             <NuqsAdapter>{children}</NuqsAdapter>
           </main>
+
+          <FloatingChatWrapper />
         </AuthProvider>
       </body>
     </html>

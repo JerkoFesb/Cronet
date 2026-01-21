@@ -22,6 +22,7 @@ export default function PretragaPage() {
   // Prefetch hook za brzi pristup podacima
   const { getFirstPage, getAllProviders, isCacheValid } = usePrefetchedProviders();
   const prefetchChecked = useRef(false);
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -30,6 +31,7 @@ export default function PretragaPage() {
     cijena: "",
     tip: ""
   });
+  const [tehnickoZnanje, setTehnickoZnanje] = useState<"početnik" | "srednje" | "napredno">("srednje");
 
   // Results state
   const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -39,6 +41,11 @@ export default function PretragaPage() {
 
   // Comparison state
   const [selectedProviders, setSelectedProviders] = useState<string[]>([]);
+  const [isCompareButtonVisible, setIsCompareButtonVisible] = useState(true);
+  const [isHoveringFloating, setIsHoveringFloating] = useState(false);
+  const [isChatVisible, setIsChatVisible] = useState(true);
+  const compareButtonRef = useRef<HTMLDivElement>(null);
+  const chatRef = useRef<HTMLDivElement>(null);
 
   // Provjeri prefetch-ane podatke pri učitavanju stranice
   useEffect(() => {
@@ -97,6 +104,13 @@ export default function PretragaPage() {
     }
   }, [currentPage, totalPages, setPage]);
 
+  // Scroll to results when page changes
+  useEffect(() => {
+    if (searchPerformed && resultsRef.current && currentPage > 1) {
+      resultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [currentPage, searchPerformed]);
+
   useEffect(() => {
     if (typeof window === "undefined" || !searchPerformed) return;
     sessionStorage.setItem("pretraga-state", JSON.stringify({
@@ -125,6 +139,24 @@ export default function PretragaPage() {
     sessionStorage.setItem("compare-selected", JSON.stringify(selectedProviders));
   }, [selectedProviders]);
 
+  // Intersection Observer za pracenje vidljivosti compare buttona
+  useEffect(() => {
+    if (!compareButtonRef.current) return;
+    
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsCompareButtonVisible(entry.isIntersecting);
+      },
+      { 
+        threshold: 0.3, // Čim je 30% buttona vidljivo, smatra se dostupnim
+        rootMargin: '0px 0px 100px 0px' // Proširuje detection area na dnu za 100px
+      }
+    );
+    
+    observer.observe(compareButtonRef.current);
+    return () => observer.disconnect();
+  }, [searchResults.length, selectedProviders.length]);
+
   const toggleProviderSelection = (providerId: string) => {
     setSelectedProviders(prev =>
       prev.includes(providerId)
@@ -133,14 +165,14 @@ export default function PretragaPage() {
     );
   };
 
-  // Tehničko znanje korisnika
-  const [tehnickoZnanje, setTehnickoZnanje] = useState<"početnik" | "srednje" | "napredno">("početnik");
+  const clearAllSelected = () => {
+    setSelectedProviders([]);
+  };
 
-  // AI Chatbot state - initialize from localStorage or with default greeting
-  const [messages, setMessages] = useState<Array<{role: "user" | "assistant", content: string}>>([
-    { role: "assistant", content: "Bok! 👋 Kako vam mogu pomoći sa odabirom mreže?" }
-  ]);
   const [inputMessage, setInputMessage] = useState("");
+  const [messages, setMessages] = useState<Array<{role: "user" | "assistant", content: string}>>([
+    { role: "assistant", content: "Bok! Ja sam tvoj CroNet asistent. Kako ti mogu pomoći?" }
+  ]);
   const [isLoading, setIsLoading] = useState(false);
   const [messagesLoaded, setMessagesLoaded] = useState(false);
 
@@ -264,6 +296,10 @@ export default function PretragaPage() {
             page: nextPage,
           }));
           setIsSearching(false);
+          // Scroll do rezultata
+          setTimeout(() => {
+            resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 50);
           return;
         }
       }
@@ -305,6 +341,11 @@ export default function PretragaPage() {
       }));
       
       console.log(`[Search] Found ${data.count} results`);
+      
+      // Scroll do rezultata
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
     } catch (error: any) {
       console.error('[Search] Error:', error);
       alert('Greška pri pretraz: ' + error.message);
@@ -382,16 +423,6 @@ export default function PretragaPage() {
     const hasTip = formData.tip !== "";
     const filledFields = [hasLocation, hasBrzina, hasCijena, hasTip].filter(Boolean).length;
     const hasAskedAI = messages.length > 1; // Više od početne poruke
-
-    // Ako ima prefetch-anih podataka, prikaži posebnu poruku
-    if (prefetchedDataAvailable && filledFields === 0 && !searchPerformed) {
-      return {
-        icon: "⚡",
-        title: "Podaci spremni!",
-        message: "Provideri su već učitani. Klikni 'Prikaži sve ponude' za brzi pregled ili unesi filtere.",
-        color: "bg-green-50 border-green-200 text-green-800"
-      };
-    }
 
     if (filledFields === 0 && !hasAskedAI) {
       return {
@@ -478,8 +509,8 @@ export default function PretragaPage() {
       
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
         {/* LIJEVA STRANA - FORMA */}
-        <div className="lg:col-span-7">
-          <div className="bg-white rounded-xl shadow-xl border border-gray-200 p-4 sm:p-6 md:p-8 flex flex-col" style={{minHeight: "400px"}}>
+        <div className="lg:col-span-7 flex">
+          <div className="bg-white rounded-xl shadow-xl border border-gray-200 p-4 sm:p-6 md:p-8 flex flex-col w-full" style={{minHeight: "500px"}}>
             <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-gray-800">Filtriraj mreže</h2>
             
             <form onSubmit={handleFormSubmit} className="space-y-4 sm:space-y-5 flex-1 flex flex-col">
@@ -592,8 +623,8 @@ export default function PretragaPage() {
         </div>
 
         {/* DESNA STRANA - CHATBOT (3/4 širine lijeve forme) */}
-        <div className="lg:col-span-5">
-          <div className="bg-white rounded-xl shadow-xl border border-gray-200 p-4 sm:p-6 flex flex-col" style={{minHeight: "400px", maxHeight: "600px"}}>
+        <div data-chat-section ref={chatRef} className="lg:col-span-5 flex sticky top-4 self-start">
+          <div className="bg-white rounded-xl shadow-xl border border-gray-200 p-4 sm:p-6 flex flex-col w-full" style={{minHeight: "500px", maxHeight: "calc(100vh - 200px)"}}>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-4 pb-4 border-b">
               <div className="w-10 h-10 bg-gradient-to-br from-[#4CAF82] to-[#45a076] rounded-full flex items-center justify-center text-white font-bold shadow-md flex-shrink-0">
                 AI
@@ -711,7 +742,7 @@ export default function PretragaPage() {
       </div>
 
       {/* Rezultati pretrage */}
-      <div className="mt-8 sm:mt-12">
+      <div ref={resultsRef} className="mt-8 sm:mt-12 scroll-mt-20">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0 mb-4 sm:mb-6">
           <h2 className="text-xl sm:text-2xl font-bold">
             {searchPerformed ? `Rezultati pretrage (${searchResults.length})` : 'Rezultati'}
@@ -725,9 +756,9 @@ export default function PretragaPage() {
                 void setPage(1);
                 sessionStorage.removeItem("pretraga-state");
               }}
-              className="text-sm text-gray-600 hover:text-gray-800 underline"
+              className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 border border-red-200 rounded-lg hover:bg-red-100 hover:border-red-300 transition font-medium text-sm shadow-sm"
             >
-              Očisti pretragu
+              <span>✕</span> Očisti pretragu
             </button>
           )}
         </div>
@@ -743,16 +774,36 @@ export default function PretragaPage() {
         ) : searchResults.length > 0 ? (
           <>
             {selectedProviders.length > 0 && (
-              <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-gradient-to-r from-[#4CAF82] to-[#45a076] rounded-lg text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 shadow-lg">
+              <div ref={compareButtonRef} className="mb-4 sm:mb-6 p-3 sm:p-4 bg-gradient-to-r from-[#4CAF82] to-[#45a076] rounded-lg text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 shadow-lg">
                 <div>
                   <p className="text-xs sm:text-sm font-semibold">Odabrano za usporedbu: <span className="text-xl sm:text-2xl font-bold">{selectedProviders.length}</span></p>
+                  {selectedProviders.length === 1 && (
+                    <p className="text-xs mt-1 opacity-90">Odaberi još najmanje 1 providera</p>
+                  )}
                 </div>
-                <Link
-                  href={`/usporedba?providers=${selectedProviders.join(',')}`}
-                  className="w-full sm:w-auto text-center px-4 sm:px-6 py-2 bg-white text-[#4CAF82] rounded-lg hover:bg-gray-100 transition font-semibold text-sm sm:text-base"
-                >
-                  Usporedi odabrane
-                </Link>
+                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                  {selectedProviders.length >= 2 ? (
+                    <Link
+                      href={`/usporedba?providers=${selectedProviders.join(',')}`}
+                      className="w-full sm:w-auto text-center px-4 sm:px-6 py-2 bg-white text-[#4CAF82] rounded-lg hover:bg-gray-100 transition font-semibold text-sm sm:text-base"
+                    >
+                      Usporedi odabrane
+                    </Link>
+                  ) : (
+                    <button
+                      disabled
+                      className="w-full sm:w-auto text-center px-4 sm:px-6 py-2 bg-white/50 text-gray-400 rounded-lg cursor-not-allowed font-semibold text-sm sm:text-base"
+                    >
+                      Usporedi odabrane
+                    </button>
+                  )}
+                  <button
+                    onClick={clearAllSelected}
+                    className="w-full sm:w-auto text-center px-4 sm:px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-semibold text-sm sm:text-base"
+                  >
+                    Ukloni odabrane
+                  </button>
+                </div>
               </div>
             )}
             <div className="grid gap-4">
@@ -914,6 +965,59 @@ export default function PretragaPage() {
           </div>
         )}
       </div>
+
+      {/* Sticky floating compare button - prikazuje se kada originalni nije vidljiv */}
+      {!isCompareButtonVisible && selectedProviders.length > 0 && (
+        <div 
+          className="sticky-compare-button animate-slide-up"
+          onMouseEnter={() => setIsHoveringFloating(true)}
+          onMouseLeave={() => setIsHoveringFloating(false)}
+        >
+          {/* Tooltip sa imenima odabranih providera */}
+          {isHoveringFloating && (
+            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-xl text-sm max-w-md">
+              <div className="font-semibold mb-1">Odabrani provideri:</div>
+              <ul className="list-disc list-inside">
+                {selectedProviders.map(providerId => {
+                  const provider = searchResults.find((p: any) => p.id === providerId);
+                  return provider ? (
+                    <li key={providerId}>{provider.providerName} - {provider.packageName}</li>
+                  ) : null;
+                })}
+              </ul>
+            </div>
+          )}
+          <div className="bg-gradient-to-r from-[#4CAF82] to-[#45a076] text-white px-4 sm:px-6 py-3 rounded-full shadow-2xl flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-2">
+              <span className="text-sm sm:text-base font-semibold">Odabrano:</span>
+              <span className="bg-white text-[#4CAF82] w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-bold text-sm sm:text-base">
+                {selectedProviders.length}
+              </span>
+            </div>
+            {selectedProviders.length >= 2 ? (
+              <Link
+                href={`/usporedba?providers=${selectedProviders.join(',')}`}
+                className="bg-white text-[#4CAF82] px-3 sm:px-5 py-2 rounded-full hover:bg-gray-100 transition font-semibold text-sm sm:text-base"
+              >
+                Usporedi →
+              </Link>
+            ) : (
+              <button
+                disabled
+                className="bg-white/50 text-gray-400 px-3 sm:px-5 py-2 rounded-full cursor-not-allowed font-semibold text-sm sm:text-base"
+              >
+                Odaberi još 1
+              </button>
+            )}
+            <button
+              onClick={clearAllSelected}
+              className="bg-red-500 text-white px-3 sm:px-5 py-2 rounded-full hover:bg-red-600 transition font-semibold text-sm sm:text-base"
+            >
+              Ukloni
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
