@@ -1,11 +1,14 @@
 import Toast from "@/app/_components/Toast";
 import Link from "next/link";
 import { Suspense } from "react";
+import { PrefetchProviders } from "@/app/_components/PrefetchProviders";
 
 function HomeContent() {
   return (
     <>
       <Toast />
+      {/* Prefetch podataka iz baze u pozadini za brzi pristup na pretraga stranici */}
+      <PrefetchProviders />
       
       {/* Hero Section */}
       <main className="container mx-auto px-4 sm:px-6 md:px-10 pt-12 md:pt-20 pb-16 md:pb-24 relative overflow-hidden">

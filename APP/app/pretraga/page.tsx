@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { useAuth } from "@/app/_providers/AuthProvider";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useQueryState, parseAsInteger } from "nuqs";
 import { Pagination } from "@/app/_components/Pagination";
 import { FormSkeleton, ChatSkeleton, SearchResultsSkeleton } from "@/app/_components/SkeletonLoader";
+import { usePrefetchedProviders } from "@/app/_components/PrefetchProviders";
 
 const PAGE_SIZE = 5;
 
@@ -18,6 +19,10 @@ export default function PretragaPage() {
     parseAsInteger.withDefault(1).withOptions({ shallow: false })
   );
   
+  // Prefetch hook za brzi pristup podacima
+  const { getFirstPage, getAllProviders, isCacheValid } = usePrefetchedProviders();
+  const prefetchChecked = useRef(false);
+
   // Form state
   const [formData, setFormData] = useState({
     lokacija: "",
@@ -30,9 +35,33 @@ export default function PretragaPage() {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [searchPerformed, setSearchPerformed] = useState(false);
+  const [prefetchedDataAvailable, setPrefetchedDataAvailable] = useState(false);
 
   // Comparison state
   const [selectedProviders, setSelectedProviders] = useState<string[]>([]);
+
+  // Provjeri prefetch-ane podatke pri učitavanju stranice
+  useEffect(() => {
+    if (typeof window === "undefined" || prefetchChecked.current) return;
+    prefetchChecked.current = true;
+
+    // Ako već imamo search rezultate (npr. iz sessionStorage), ne koristi prefetch
+    const saved = sessionStorage.getItem("pretraga-state");
+    if (saved) return;
+
+    // Provjeri ima li prefetch-anih podataka
+    const firstPage = getFirstPage();
+    const allProviders = getAllProviders();
+    
+    if (firstPage && firstPage.length > 0) {
+      console.log("[PretragaPage] Using prefetched first page data:", firstPage.length, "providers");
+      setPrefetchedDataAvailable(true);
+    }
+    
+    if (allProviders && allProviders.length > 0) {
+      console.log("[PretragaPage] Prefetched all providers available:", allProviders.length, "providers");
+    }
+  }, [getFirstPage, getAllProviders]);
 
   // Restore last search when returning to the page (e.g. back from detalji)
   useEffect(() => {
@@ -217,6 +246,28 @@ export default function PretragaPage() {
     setSearchPerformed(true);
 
     try {
+      // Provjeri ima li filtera - ako nema, koristi prefetch-ane podatke
+      const hasFilters = formData.lokacija || formData.brzina || formData.cijena || formData.tip;
+      
+      if (!hasFilters && isCacheValid()) {
+        // Nema filtera, koristi prefetch-ane podatke ako postoje
+        const allProviders = getAllProviders();
+        if (allProviders && allProviders.length > 0) {
+          console.log('[Search] Using prefetched data:', allProviders.length, 'providers');
+          setSearchResults(allProviders);
+          const nextPage = 1;
+          void setPage(nextPage);
+          sessionStorage.setItem("pretraga-state", JSON.stringify({
+            formData,
+            searchResults: allProviders,
+            searchPerformed: true,
+            page: nextPage,
+          }));
+          setIsSearching(false);
+          return;
+        }
+      }
+
       // Kreiraj query parametre
       const params = new URLSearchParams();
       if (formData.lokacija) params.append("city", formData.lokacija);
@@ -331,6 +382,16 @@ export default function PretragaPage() {
     const hasTip = formData.tip !== "";
     const filledFields = [hasLocation, hasBrzina, hasCijena, hasTip].filter(Boolean).length;
     const hasAskedAI = messages.length > 1; // Više od početne poruke
+
+    // Ako ima prefetch-anih podataka, prikaži posebnu poruku
+    if (prefetchedDataAvailable && filledFields === 0 && !searchPerformed) {
+      return {
+        icon: "⚡",
+        title: "Podaci spremni!",
+        message: "Provideri su već učitani. Klikni 'Prikaži sve ponude' za brzi pregled ili unesi filtere.",
+        color: "bg-green-50 border-green-200 text-green-800"
+      };
+    }
 
     if (filledFields === 0 && !hasAskedAI) {
       return {
@@ -494,12 +555,38 @@ export default function PretragaPage() {
               </div>
               </div>
 
-              <button
-                type="submit"
-                className="w-full bg-[#4CAF82] text-white py-3 px-4 rounded-lg hover:bg-[#45a076] transition font-semibold shadow-md mt-auto"
-              >
-                Pretraži
-              </button>
+              <div className="flex flex-col gap-2 mt-auto">
+                <button
+                  type="submit"
+                  className="w-full bg-[#4CAF82] text-white py-3 px-4 rounded-lg hover:bg-[#45a076] transition font-semibold shadow-md"
+                >
+                  Pretraži
+                </button>
+                
+                {/* Brzi gumb za prikaz svih ponuda ako ima prefetch-anih podataka */}
+                {prefetchedDataAvailable && !searchPerformed && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const allProviders = getAllProviders();
+                      if (allProviders && allProviders.length > 0) {
+                        setSearchResults(allProviders);
+                        setSearchPerformed(true);
+                        void setPage(1);
+                        sessionStorage.setItem("pretraga-state", JSON.stringify({
+                          formData,
+                          searchResults: allProviders,
+                          searchPerformed: true,
+                          page: 1,
+                        }));
+                      }
+                    }}
+                    className="w-full bg-[#1E1B8F] text-white py-3 px-4 rounded-lg hover:bg-[#2E2BA0] transition font-semibold shadow-md flex items-center justify-center gap-2"
+                  >
+                    <span>⚡</span> Prikaži sve ponude
+                  </button>
+                )}
+              </div>
             </form>
           </div>
         </div>
