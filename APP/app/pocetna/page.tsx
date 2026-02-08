@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { PageStatusGuard } from "@/app/_components/PageStatusGuard";
 
 export default function Page() {
   return (
+    <PageStatusGuard slug="pocetna">
     <div className="min-h-screen bg-[#F8FAFC]">
       {/* Hero Section */}
       <main className="container mx-auto px-4 sm:px-6 md:px-10 pt-12 md:pt-20 pb-16 md:pb-24 relative overflow-hidden">
@@ -180,5 +182,6 @@ export default function Page() {
         </div>
       </footer>
     </div>
+    </PageStatusGuard>
   );
 } 

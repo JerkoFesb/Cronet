@@ -9,26 +9,82 @@ type Page = {
   path: `/${string}`;
 };
 
-const basePages: Page[] = [
-  { title: "Početna", path: "/" },
-  { title: "Pretraga", path: "/pretraga" },
-  { title: "Pomoć", path: "/pomoc" },
-];
+export function Navigation() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const { user, signOut, loading } = useAuth();
+  const [currentPath, setCurrentPath] = useState<string | undefined>(undefined);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [basePages, setBasePages] = useState<Page[]>([]);
+  const [pagesLoading, setPagesLoading] = useState(true);
 
-// Memoized auth button component to prevent unnecessary re-renders
-const AuthButton = memo(function AuthButton({ 
-  user, 
-  loading, 
-  onSignOut, 
-  isMobile = false,
-  onMobileClose
-}: { 
-  user: { name?: string; email?: string } | null;
-  loading: boolean;
-  onSignOut: () => void;
-  isMobile?: boolean;
-  onMobileClose?: () => void;
-}) {
+  // Fetch navigation items from Sanity via API
+  useEffect(() => {
+    const fetchNavigation = async () => {
+      try {
+        const res = await fetch('/api/navigation')
+        const data = await res.json()
+        setBasePages(data.pages || [])
+      } catch (error) {
+        console.error('Failed to fetch navigation:', error)
+        // Fallback to empty array if CMS is down
+        setBasePages([])
+      } finally {
+        setPagesLoading(false)
+      }
+    }
+
+    // Fetch immediately on mount
+    fetchNavigation()
+
+    // Poll for updates every 5 seconds (webhook will revalidate cache immediately)
+    const interval = setInterval(fetchNavigation, 5000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  // Use effect to sync pathname on client-side only to avoid hydration mismatch
+  useEffect(() => {
+    setCurrentPath(pathname);
+  }, [pathname]);
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
+  const handleSignOut = async () => {
+    try {
+      // Clear search state (form fields)
+      if (typeof window !== "undefined") {
+        sessionStorage.removeItem("pretraga-state");
+        // Keep chat messages in localStorage - don't delete them!
+      }
+      await signOut();
+      // show a signed-out toast on the homepage
+      router.push(`/?toast=signedout`);
+    } catch (e) {
+      console.error("signOut error", e);
+      router.push("/");
+    }
+  };
+
+  const closeMobileMenu = () => setMobileMenuOpen(false);
+
+  // Memoized auth button component to prevent unnecessary re-renders
+  const AuthButton = memo(function AuthButton({ 
+    user, 
+    loading, 
+    onSignOut, 
+    isMobile = false,
+    onMobileClose
+  }: { 
+    user: { name?: string; email?: string } | null;
+    loading: boolean;
+    onSignOut: () => void;
+    isMobile?: boolean;
+    onMobileClose?: () => void;
+  }) {
   const isLoggedIn = user && (user.name || user.email);
   const displayName = user?.name ?? user?.email ?? '';
   
@@ -89,41 +145,6 @@ const AuthButton = memo(function AuthButton({
     </Link>
   );
 });
-
-export function Navigation() {
-  const pathname = usePathname();
-  const router = useRouter();
-  const { user, signOut, loading } = useAuth();
-  const [currentPath, setCurrentPath] = useState<string | undefined>(undefined);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // Use effect to sync pathname on client-side only to avoid hydration mismatch
-  useEffect(() => {
-    setCurrentPath(pathname);
-  }, [pathname]);
-
-  // Close mobile menu when route changes
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [pathname]);
-
-  const handleSignOut = async () => {
-    try {
-      // Clear search state (form fields)
-      if (typeof window !== "undefined") {
-        sessionStorage.removeItem("pretraga-state");
-        // Keep chat messages in localStorage - don't delete them!
-      }
-      await signOut();
-      // show a signed-out toast on the homepage
-      router.push(`/?toast=signedout`);
-    } catch (e) {
-      console.error("signOut error", e);
-      router.push("/");
-    }
-  };
-
-  const closeMobileMenu = () => setMobileMenuOpen(false);
 
   return (
     <nav className="bg-white/95 backdrop-blur-sm py-4 md:py-6 px-4 md:px-10 border-b border-gray-100 shadow-sm">

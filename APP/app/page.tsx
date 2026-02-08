@@ -3,9 +3,11 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { PrefetchProviders } from "@/app/_components/PrefetchProviders";
 import TypewriterText from "@/app/_components/TypewriterText";
+import { PageStatusGuard } from "@/app/_components/PageStatusGuard";
 
 function HomeContent() {
   return (
+    <PageStatusGuard slug="home">
     <>
       <Toast />
       {/* Prefetch podataka iz baze u pozadini za brzi pristup na pretraga stranici */}
@@ -21,12 +23,15 @@ function HomeContent() {
               Pametni izbor interneta
             </div>
             
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-              <TypewriterText 
-                text="Ne ostavljaj svoj internet slučaju - pronađi najbolji paket za svoj dom u samo par klikova."
-                speed={40}
-              />
-            </h1>
+            {/* Fixed height container to prevent content jumping during typewriter effect */}
+            <div className="min-h-[160px] sm:min-h-[180px] md:min-h-[200px] lg:min-h-[220px]">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                <TypewriterText 
+                  text="Pronađi idealan internet paket u par klikova."
+                  speed={40}
+                />
+              </h1>
+            </div>
             
             <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
               CroNet uspoređuje ponude svih glavnih internet pružatelja u Hrvatskoj i pomaže vam odabrati najbolju opciju za vaše potrebe.
@@ -50,8 +55,11 @@ function HomeContent() {
 
           {/* Right Side - Top Offers Card - Wrapped in Suspense for skeleton loading */}
           <Suspense fallback={<SkeletonCard />}>
-            <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 text-center">Top ponude</h2>
+            <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 border-2 border-gray-100">
+            <div className="bg-gradient-to-r from-[#4A90E2] to-[#1E1B8F] -mx-4 sm:-mx-6 md:-mx-8 -mt-4 sm:-mt-6 md:-mt-8 px-4 sm:px-6 md:px-8 py-4 rounded-t-2xl mb-4">
+              <h2 className="text-xl sm:text-2xl font-bold text-white text-center">🏆 Top ponude</h2>
+              <p className="text-white/80 text-sm text-center mt-1">Najbolje ocijenjeni paketi</p>
+            </div>
             
             {/* T-HOME Offer */}
             <a href="https://www.t.ht.hr/" target="_blank" rel="noopener noreferrer" className="block border-2 border-gray-200 rounded-xl p-4 sm:p-6 space-y-3 hover:border-[#4A90E2] transition cursor-pointer">
@@ -130,7 +138,7 @@ function HomeContent() {
             </div>
           </div>
           
-          <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 pr-20">
             <div className="flex gap-4">
                 {/* Social icons styled minimally */}
                 {['Twitter', 'Instagram', 'LinkedIn'].map((social) => (
@@ -146,10 +154,11 @@ function HomeContent() {
         </div>
       </footer>
     </>
+    </PageStatusGuard>
   );
 }
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#EBF5FF] via-[#F5F9FF] to-white flex flex-col">
       <Suspense fallback={<SkeletonHome />}>

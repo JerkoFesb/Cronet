@@ -8,6 +8,7 @@ import { useQueryState, parseAsInteger } from "nuqs";
 import { Pagination } from "@/app/_components/Pagination";
 import { FormSkeleton, ChatSkeleton, SearchResultsSkeleton } from "@/app/_components/SkeletonLoader";
 import { usePrefetchedProviders } from "@/app/_components/PrefetchProviders";
+import { PageStatusGuard } from "@/app/_components/PageStatusGuard";
 
 const PAGE_SIZE = 5;
 
@@ -480,6 +481,7 @@ export default function PretragaPage() {
   const currentTip = getSmartTip();
 
   return (
+    <PageStatusGuard slug="pretraga">
     <div className="min-h-screen bg-gray-100 p-4 sm:p-6 md:p-8">
       {/* Smart Progress Bar sa Savjetima */}
       <div className={`mb-4 sm:mb-6 p-3 sm:p-4 rounded-lg border-2 ${currentTip.color} transition-all duration-300`}>
@@ -553,6 +555,7 @@ export default function PretragaPage() {
                 <input
                   type="number"
                   min={0}
+                  max={200}
                   value={formData.cijena}
                   onChange={(e) => {
                     const v = e.target.value;
@@ -561,11 +564,19 @@ export default function PretragaPage() {
                       return;
                     }
                     const num = Number(v);
-                    setFormData({ ...formData, cijena: num < 0 ? "0" : v });
+                    if (num < 0) {
+                      setFormData({ ...formData, cijena: "0" });
+                    } else if (num > 200) {
+                      setFormData({ ...formData, cijena: "200" });
+                    } else {
+                      setFormData({ ...formData, cijena: v });
+                    }
                   }}
-                  placeholder="Max cijena"
+                  placeholder="Max cijena (0-200€)"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4CAF82] focus:border-transparent"
+                  aria-describedby="cijena-help"
                 />
+                <p id="cijena-help" className="text-xs text-gray-500 mt-1">Unesite maksimalnu cijenu (0-200€)</p>
               </div>
 
               <div>
@@ -1019,5 +1030,6 @@ export default function PretragaPage() {
         </div>
       )}
     </div>
+    </PageStatusGuard>
   );
 }

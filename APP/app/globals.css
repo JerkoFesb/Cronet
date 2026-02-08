@@ -51,3 +51,35 @@ body {
 .animate-slide-up {
   animation: slide-up 0.3s ease-out forwards;
 }
+
+/* Accessibility: Visible focus states for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid #4A90E2 !important;
+  outline-offset: 2px !important;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #4A90E2 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.2) !important;
+}
+
+/* Skip to main content link for screen readers */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #1E1B8F;
+  color: white;
+  padding: 8px 16px;
+  z-index: 100;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
