@@ -7,7 +7,7 @@ const client = postgres(process.env.DATABASE_URL!, {
   max: 10, // Increase connection pool for better performance
   idle_timeout: 20, // Close idle connections after 20 seconds
   max_lifetime: 60 * 30, // Close connections after 30 minutes
-  connect_timeout: 3, // Reduce connection timeout to 3 seconds for faster failures
+  connect_timeout: 15, // Allow more time for local dev connections to Supabase
   prepare: false, // Disable prepared statements for better compatibility
 });
 

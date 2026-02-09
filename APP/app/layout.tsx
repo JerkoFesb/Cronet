@@ -32,11 +32,14 @@ export default async function RootLayout({
   let initialUser: { name?: string; email?: string } | null = null;
   try {
     const hdrs = await headers();
-    const session = await auth.api.getSession({ headers: hdrs });
+    const sessionPromise = auth.api.getSession({ headers: hdrs });
+    // Add a timeout so a slow/dead DB doesn't block the entire page render
+    const timeout = new Promise<null>((resolve) => setTimeout(() => resolve(null), 3000));
+    const session = await Promise.race([sessionPromise, timeout]);
     if (session?.user) {
       initialUser = { name: session.user.name, email: session.user.email };
     }
-  } catch (e) {
+  } catch {
     // Fail silently; client will revalidate
   }
   return (
