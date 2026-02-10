@@ -1,7 +1,7 @@
 export default function Loading() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#EBF5FF] via-[#F5F9FF] to-white flex flex-col">
-      <main className="px-10 pt-20 pb-20 flex-1 flex items-center">
+      <main className="px-4 sm:px-6 md:px-10 pt-12 md:pt-20 pb-12 md:pb-20 flex-1 flex items-center">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start w-full">
           {/* Left Side Skeleton */}
           <div className="space-y-4">

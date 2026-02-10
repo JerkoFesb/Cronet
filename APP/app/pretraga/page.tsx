@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useAuth } from "@/app/_providers/AuthProvider";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useQueryState, parseAsInteger } from "nuqs";
 import { Pagination } from "@/app/_components/Pagination";
 import { FormSkeleton, ChatSkeleton, SearchResultsSkeleton } from "@/app/_components/SkeletonLoader";
@@ -45,7 +45,29 @@ export default function PretragaPage() {
   const [isCompareButtonVisible, setIsCompareButtonVisible] = useState(true);
   const [isHoveringFloating, setIsHoveringFloating] = useState(false);
   const [isChatVisible, setIsChatVisible] = useState(true);
-  const compareButtonRef = useRef<HTMLDivElement>(null);
+  const compareButtonNodeRef = useRef<HTMLDivElement | null>(null);
+  const compareObserverRef = useRef<IntersectionObserver | null>(null);
+  const compareButtonRef = useCallback((node: HTMLDivElement | null) => {
+    // Cleanup previous observer
+    if (compareObserverRef.current) {
+      compareObserverRef.current.disconnect();
+      compareObserverRef.current = null;
+    }
+    compareButtonNodeRef.current = node;
+    if (node) {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          setIsCompareButtonVisible(entry.isIntersecting);
+        },
+        { threshold: 0.3, rootMargin: '0px 0px 100px 0px' }
+      );
+      observer.observe(node);
+      compareObserverRef.current = observer;
+    } else {
+      // Element removed from DOM — inline bar not rendered, so not visible
+      setIsCompareButtonVisible(false);
+    }
+  }, []);
   const chatRef = useRef<HTMLDivElement>(null);
 
   // Provjeri prefetch-ane podatke pri učitavanju stranice
@@ -123,6 +145,8 @@ export default function PretragaPage() {
   }, [formData, searchResults, searchPerformed, safePage]);
 
   // Restore and save selected providers
+  const [compareRestored, setCompareRestored] = useState(false);
+
   useEffect(() => {
     if (typeof window === "undefined") return;
     const saved = sessionStorage.getItem("compare-selected");
@@ -133,30 +157,22 @@ export default function PretragaPage() {
         console.error("Failed to restore selected providers", err);
       }
     }
+    setCompareRestored(true);
   }, []);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || !compareRestored) return;
     sessionStorage.setItem("compare-selected", JSON.stringify(selectedProviders));
-  }, [selectedProviders]);
+  }, [selectedProviders, compareRestored]);
 
-  // Intersection Observer za pracenje vidljivosti compare buttona
+  // Cleanup observer on unmount
   useEffect(() => {
-    if (!compareButtonRef.current) return;
-    
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsCompareButtonVisible(entry.isIntersecting);
-      },
-      { 
-        threshold: 0.3, // Čim je 30% buttona vidljivo, smatra se dostupnim
-        rootMargin: '0px 0px 100px 0px' // Proširuje detection area na dnu za 100px
+    return () => {
+      if (compareObserverRef.current) {
+        compareObserverRef.current.disconnect();
       }
-    );
-    
-    observer.observe(compareButtonRef.current);
-    return () => observer.disconnect();
-  }, [searchResults.length, selectedProviders.length]);
+    };
+  }, []);
 
   const toggleProviderSelection = (providerId: string) => {
     setSelectedProviders(prev =>
@@ -524,8 +540,15 @@ export default function PretragaPage() {
                 <input
                   type="text"
                   value={formData.lokacija}
-                  onChange={(e) => setFormData({...formData, lokacija: e.target.value})}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    // Samo slova hrvatske abecede, razmaci i crtice, max 50 znakova
+                    if (v.length > 50) return;
+                    if (v !== "" && !/^[a-zA-ZčćšžđČĆŠŽĐ\s-]*$/.test(v)) return;
+                    setFormData({...formData, lokacija: v});
+                  }}
                   placeholder="Npr. Zagreb, Split..."
+                  maxLength={50}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4CAF82] focus:border-transparent"
                 />
               </div>
@@ -554,7 +577,7 @@ export default function PretragaPage() {
                 </label>
                 <input
                   type="number"
-                  min={0}
+                  min={1}
                   max={200}
                   value={formData.cijena}
                   onChange={(e) => {
@@ -564,19 +587,19 @@ export default function PretragaPage() {
                       return;
                     }
                     const num = Number(v);
-                    if (num < 0) {
-                      setFormData({ ...formData, cijena: "0" });
+                    if (!Number.isFinite(num) || num <= 0) {
+                      setFormData({ ...formData, cijena: "1" });
                     } else if (num > 200) {
                       setFormData({ ...formData, cijena: "200" });
                     } else {
-                      setFormData({ ...formData, cijena: v });
+                      setFormData({ ...formData, cijena: String(Math.floor(num)) });
                     }
                   }}
-                  placeholder="Max cijena (0-200€)"
+                  placeholder="Max cijena (1-200€)"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4CAF82] focus:border-transparent"
                   aria-describedby="cijena-help"
                 />
-                <p id="cijena-help" className="text-xs text-gray-500 mt-1">Unesite maksimalnu cijenu (0-200€)</p>
+                <p id="cijena-help" className="text-xs text-gray-500 mt-1">Unesite maksimalnu cijenu (1-200€)</p>
               </div>
 
               <div>
@@ -634,7 +657,7 @@ export default function PretragaPage() {
         </div>
 
         {/* DESNA STRANA - CHATBOT (3/4 širine lijeve forme) */}
-        <div data-chat-section ref={chatRef} className="lg:col-span-5 flex sticky top-4 self-start">
+        <div data-chat-section ref={chatRef} className="lg:col-span-5 flex lg:sticky lg:top-24 self-start">
           <div className="bg-white rounded-xl shadow-xl border border-gray-200 p-4 sm:p-6 flex flex-col w-full" style={{minHeight: "500px", maxHeight: "calc(100vh - 200px)"}}>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-4 pb-4 border-b">
               <div className="w-10 h-10 bg-gradient-to-br from-[#4CAF82] to-[#45a076] rounded-full flex items-center justify-center text-white font-bold shadow-md flex-shrink-0">

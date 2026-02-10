@@ -34,7 +34,7 @@ export function SearchResultsSkeleton() {
 export function DetailPageSkeleton() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#EBF5FF] via-[#F5F9FF] to-white">
-      <div className="container mx-auto px-10 py-16">
+      <div className="container mx-auto px-4 sm:px-6 md:px-10 py-8 md:py-16">
         <div className="bg-white rounded-2xl shadow-xl p-8 animate-pulse">
           {/* Header */}
           <div className="flex items-start gap-6 mb-8">

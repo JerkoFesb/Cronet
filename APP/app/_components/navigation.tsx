@@ -34,13 +34,7 @@ export function Navigation() {
       }
     }
 
-    // Fetch immediately on mount
     fetchNavigation()
-
-    // Poll for updates every 5 seconds (webhook will revalidate cache immediately)
-    const interval = setInterval(fetchNavigation, 5000)
-
-    return () => clearInterval(interval)
   }, [])
 
   // Use effect to sync pathname on client-side only to avoid hydration mismatch

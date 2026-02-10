@@ -43,7 +43,7 @@ export default async function RootLayout({
     // Fail silently; client will revalidate
   }
   return (
-    <html lang="en">
+    <html lang="en" style={{ colorScheme: 'light only' }}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {/* Wrap the whole app UI with AuthProvider so header/navigation can use auth state */}
         <AuthProvider initialUser={initialUser}>

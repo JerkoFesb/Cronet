@@ -24,26 +24,15 @@ export function FloatingChat({ onOpenPretragaChat, isPretragaChatOpen }: Floatin
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [isPositioned, setIsPositioned] = useState(false);
+  const [hasBeenDragged, setHasBeenDragged] = useState(false);
   const chatPanelRef = useRef<HTMLDivElement>(null);
 
-  // Set initial position when opened (above the button, aligned to the right)
+  // Reset drag state when panel closes
   useEffect(() => {
-    if (isOpen && !isPretragaPage && !isPositioned) {
-      // Wait for next frame to ensure window dimensions are correct
-      requestAnimationFrame(() => {
-        const panelWidth = 320; // w-80 = 320px
-        const initialX = window.innerWidth - panelWidth; // Desni rub panela dodiruje desni rub ekrana
-        const initialY = window.innerHeight - 500 - 120; // 500px height + 120px for button + label + gap
-        setPosition({ x: initialX, y: initialY });
-        setIsPositioned(true);
-      });
-    }
-    
     if (!isOpen) {
-      setIsPositioned(false);
+      setHasBeenDragged(false);
     }
-  }, [isOpen, isPretragaPage, isPositioned]);
+  }, [isOpen]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if ((e.target as HTMLElement).tagName === 'INPUT' || 
@@ -51,11 +40,25 @@ export function FloatingChat({ onOpenPretragaChat, isPretragaChatOpen }: Floatin
         (e.target as HTMLElement).tagName === 'TEXTAREA') {
       return;
     }
+    // On first drag, capture the current CSS position and switch to left/top positioning
+    if (!hasBeenDragged && chatPanelRef.current) {
+      const rect = chatPanelRef.current.getBoundingClientRect();
+      setPosition({ x: rect.left, y: rect.top });
+      setHasBeenDragged(true);
+    }
     setIsDragging(true);
-    setDragStart({
-      x: e.clientX - position.x,
-      y: e.clientY - position.y
-    });
+    if (hasBeenDragged) {
+      setDragStart({
+        x: e.clientX - position.x,
+        y: e.clientY - position.y
+      });
+    } else if (chatPanelRef.current) {
+      const rect = chatPanelRef.current.getBoundingClientRect();
+      setDragStart({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      });
+    }
   };
 
   const handleMouseMove = (e: MouseEvent) => {
@@ -191,11 +194,15 @@ export function FloatingChat({ onOpenPretragaChat, isPretragaChatOpen }: Floatin
         <div 
           ref={chatPanelRef}
           onMouseDown={handleMouseDown}
-          className="fixed w-80 h-[500px] bg-white rounded-2xl shadow-2xl border-2 border-[#4CAF82] flex flex-col z-50 animate-slide-up"
-          style={{
+          className="fixed w-[calc(100vw-3rem)] sm:w-80 h-[min(500px,80vh)] bg-white rounded-2xl shadow-2xl border-2 border-[#4CAF82] flex flex-col z-50 animate-chat-slide-up"
+          style={hasBeenDragged ? {
             left: `${position.x}px`,
             top: `${position.y}px`,
             cursor: isDragging ? 'grabbing' : 'grab'
+          } : {
+            right: '24px',
+            bottom: '120px',
+            cursor: 'grab'
           }}
         >
           {/* Header */}

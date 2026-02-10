@@ -75,6 +75,8 @@ function LoginForm({ onSwitch, callback }: { onSwitch: () => void; callback?: st
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [emailTouched, setEmailTouched] = useState(false);
   const [passwordTouched, setPasswordTouched] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   // Prefetch destination on mount for faster navigation
   const redirectUrl = callback || "/";
@@ -142,7 +144,7 @@ function LoginForm({ onSwitch, callback }: { onSwitch: () => void; callback?: st
     }
   };
 
-  const isLoading = isSubmitting || isPending;
+  const isLoading = isSubmitting || isPending || googleLoading;
 
   return (
     <>
@@ -169,21 +171,41 @@ function LoginForm({ onSwitch, callback }: { onSwitch: () => void; callback?: st
         </div>
 
         <div>
-          <input
-            name="password"
-            type="password"
-            placeholder="Lozinka"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              if (passwordTouched) validatePassword(e.target.value);
-            }}
-            onBlur={(e) => { setPasswordTouched(true); validatePassword(e.target.value); }}
-            aria-invalid={!!passwordError}
-            aria-describedby="login-password-desc"
-            disabled={isLoading}
-            className="w-full p-2 border rounded transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
-          />
+          <div className="relative">
+            <input
+              name="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Lozinka"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (passwordTouched) validatePassword(e.target.value);
+              }}
+              onBlur={(e) => { setPasswordTouched(true); validatePassword(e.target.value); }}
+              aria-invalid={!!passwordError}
+              aria-describedby="login-password-desc"
+              disabled={isLoading}
+              className="w-full p-2 pr-10 border rounded transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+            />
+            <button
+              type="button"
+              tabIndex={-1}
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors p-1 cursor-pointer"
+              aria-label={showPassword ? "Sakrij lozinku" : "Prikaži lozinku"}
+            >
+              {showPassword ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-5 0-9.27-3.11-11-7.5a11.72 11.72 0 013.168-4.477M6.343 6.343A9.97 9.97 0 0112 5c5 0 9.27 3.11 11 7.5a11.72 11.72 0 01-4.168 4.477M6.343 6.343L3 3m3.343 3.343l2.829 2.829m4.243 4.243L17.657 17.657M17.657 17.657L21 21m-3.343-3.343l-2.829-2.829a3 3 0 01-4.243-4.243" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+              )}
+            </button>
+          </div>
           <p id="login-password-desc" className={`text-sm mt-1 ${passwordError ? "text-red-600" : "text-gray-500"}`}>
             {passwordError ?? "Lozinka mora imati barem 8 znakova."}
           </p>
@@ -192,7 +214,7 @@ function LoginForm({ onSwitch, callback }: { onSwitch: () => void; callback?: st
         <button
           type="submit"
           disabled={isLoading || !isEmailValid(email) || !isPasswordValid(password)}
-          className="w-full bg-blue-600 text-white py-2 rounded disabled:opacity-50 transition-all hover:bg-blue-700 active:scale-[0.98] flex items-center justify-center gap-2"
+          className="w-full bg-blue-600 text-white py-2 rounded disabled:opacity-50 transition-all hover:bg-blue-700 active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed"
         >
           {isLoading ? (
             <>
@@ -207,9 +229,50 @@ function LoginForm({ onSwitch, callback }: { onSwitch: () => void; callback?: st
         {error && <p className="text-red-600 text-sm animate-shake" role="alert">{error.message}</p>}
       </form>
 
+      {/* Google divider */}
+      <div className="flex items-center my-4">
+        <div className="flex-1 border-t border-gray-300"></div>
+        <span className="px-3 text-sm text-gray-500">ili</span>
+        <div className="flex-1 border-t border-gray-300"></div>
+      </div>
+
+      {/* Google sign-in */}
+      <button
+        type="button"
+        disabled={isLoading}
+        onClick={() => {
+          setGoogleLoading(true);
+          authClient.signIn.social({
+            provider: "google",
+            callbackURL: redirectUrl,
+          });
+        }}
+        className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded py-2 px-4 cursor-pointer hover:bg-blue-50 hover:border-blue-300 hover:shadow-md active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {googleLoading ? (
+          <>
+            <svg className="animate-spin h-5 w-5 text-gray-500" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+            </svg>
+            <span className="text-sm font-medium text-gray-500">Preusmjeravanje na Google...</span>
+          </>
+        ) : (
+          <>
+            <svg className="w-5 h-5" viewBox="0 0 24 24">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            <span className="text-sm font-medium text-gray-700">Nastavi s Googleom</span>
+          </>
+        )}
+      </button>
+
       <p className="text-sm text-center mt-4">
         Nemaš račun?{" "}
-        <button onClick={onSwitch} disabled={isLoading} className="text-blue-600 underline hover:text-blue-800 disabled:opacity-50">
+        <button onClick={onSwitch} disabled={isLoading} className="text-blue-600 underline hover:text-blue-800 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed">
           Registriraj se
         </button>
       </p>
@@ -236,6 +299,8 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
 
   const [checkingEmail, setCheckingEmail] = useState(false);
   const [emailAvailable, setEmailAvailable] = useState<boolean | null>(null);
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   
   // Abort controller for canceling email check requests
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -343,7 +408,7 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
     }
   };
 
-  const isLoading = isSubmitting || isPending;
+  const isLoading = isSubmitting || isPending || googleLoading;
   const canSubmit = !isLoading && !usernameError && !emailError && !passwordError && 
                     username && email && password && !checkingEmail && emailAvailable !== false;
 
@@ -416,18 +481,38 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
         </div>
 
         <div>
-          <input
-            name="password"
-            type="password"
-            placeholder="Lozinka"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onBlur={(e) => validatePassword(e.target.value)}
-            aria-invalid={!!passwordError}
-            aria-describedby="reg-password-desc"
-            disabled={isLoading}
-            className="w-full p-2 border rounded transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
-          />
+          <div className="relative">
+            <input
+              name="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Lozinka"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onBlur={(e) => validatePassword(e.target.value)}
+              aria-invalid={!!passwordError}
+              aria-describedby="reg-password-desc"
+              disabled={isLoading}
+              className="w-full p-2 pr-10 border rounded transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+            />
+            <button
+              type="button"
+              tabIndex={-1}
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors p-1 cursor-pointer"
+              aria-label={showPassword ? "Sakrij lozinku" : "Prikaži lozinku"}
+            >
+              {showPassword ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-5 0-9.27-3.11-11-7.5a11.72 11.72 0 013.168-4.477M6.343 6.343A9.97 9.97 0 0112 5c5 0 9.27 3.11 11 7.5a11.72 11.72 0 01-4.168 4.477M6.343 6.343L3 3m3.343 3.343l2.829 2.829m4.243 4.243L17.657 17.657M17.657 17.657L21 21m-3.343-3.343l-2.829-2.829a3 3 0 01-4.243-4.243" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+              )}
+            </button>
+          </div>
           <p id="reg-password-desc" className={`text-sm mt-1 ${passwordError ? "text-red-600" : "text-gray-500"}`}>
             {passwordError ?? "Lozinka mora imati barem 8 znakova."}
           </p>
@@ -436,7 +521,7 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
         <button
           type="submit"
           disabled={!canSubmit}
-          className="w-full bg-green-600 text-white py-2 rounded disabled:opacity-50 transition-all hover:bg-green-700 active:scale-[0.98] flex items-center justify-center gap-2"
+          className="w-full bg-green-600 text-white py-2 rounded disabled:opacity-50 transition-all hover:bg-green-700 active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed"
         >
           {isLoading ? (
             <>
@@ -451,9 +536,50 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
         {error && <p className="text-red-600 text-sm" role="alert">{error.message}</p>}
       </form>
 
+      {/* Google divider */}
+      <div className="flex items-center my-4">
+        <div className="flex-1 border-t border-gray-300"></div>
+        <span className="px-3 text-sm text-gray-500">ili</span>
+        <div className="flex-1 border-t border-gray-300"></div>
+      </div>
+
+      {/* Google sign-up */}
+      <button
+        type="button"
+        disabled={isLoading}
+        onClick={() => {
+          setGoogleLoading(true);
+          authClient.signIn.social({
+            provider: "google",
+            callbackURL: "/",
+          });
+        }}
+        className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded py-2 px-4 cursor-pointer hover:bg-blue-50 hover:border-blue-300 hover:shadow-md active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {googleLoading ? (
+          <>
+            <svg className="animate-spin h-5 w-5 text-gray-500" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+            </svg>
+            <span className="text-sm font-medium text-gray-500">Preusmjeravanje na Google...</span>
+          </>
+        ) : (
+          <>
+            <svg className="w-5 h-5" viewBox="0 0 24 24">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            <span className="text-sm font-medium text-gray-700">Registriraj se s Googleom</span>
+          </>
+        )}
+      </button>
+
       <p className="text-sm text-center mt-4">
         Već imaš račun?{" "}
-        <button onClick={onSwitch} disabled={isLoading} className="text-blue-600 underline hover:text-blue-800 disabled:opacity-50">
+        <button onClick={onSwitch} disabled={isLoading} className="text-blue-600 underline hover:text-blue-800 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed">
           Prijavi se
         </button>
       </p>

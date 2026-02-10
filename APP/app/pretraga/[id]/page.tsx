@@ -18,6 +18,7 @@ interface Provider {
   contractMonths: number;
   promotionActive: boolean;
   promotionDetails: string | null;
+  websiteUrl: string | null;
 }
 
 export default function DetaljiProvidera() {
@@ -315,9 +316,26 @@ export default function DetaljiProvidera() {
                   <p className="text-sm sm:text-base text-gray-600">Kontaktirajte providera za više informacija</p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full md:w-auto">
-                  <button className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#4A90E2] to-[#3A7BC8] text-white font-bold rounded-xl hover:shadow-xl transition text-sm sm:text-base">
-                    Kontaktiraj
-                  </button>
+                  {provider.websiteUrl ? (
+                    <a 
+                      href={provider.websiteUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#4A90E2] to-[#3A7BC8] text-white font-bold rounded-xl hover:shadow-xl transition text-sm sm:text-base text-center"
+                    >
+                      Kontaktiraj
+                    </a>
+                  ) : (
+                    <button 
+                      onClick={() => {
+                        const query = encodeURIComponent(`${provider.providerName} ${provider.packageName} internet`);
+                        window.open(`https://www.google.com/search?q=${query}`, '_blank');
+                      }}
+                      className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#4A90E2] to-[#3A7BC8] text-white font-bold rounded-xl hover:shadow-xl transition text-sm sm:text-base"
+                    >
+                      Kontaktiraj
+                    </button>
+                  )}
                   <button 
                     onClick={handleCompare}
                     className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-white border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:border-[#4A90E2] hover:bg-blue-50 transition text-center text-sm sm:text-base"

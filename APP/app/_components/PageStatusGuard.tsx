@@ -38,13 +38,7 @@ export function PageStatusGuard({ slug, children }: PageStatusGuardProps) {
       }
     };
 
-    // Fetch immediately
     checkPageStatus();
-
-    // Poll every 2 seconds for fast updates
-    const interval = setInterval(checkPageStatus, 2000);
-
-    return () => clearInterval(interval);
   }, [slug]);
 
   // Show loading state briefly

@@ -125,8 +125,8 @@ function HomeContent() {
             <div className="space-y-4">
               <h3 className="text-white font-semibold">Usluge</h3>
               <ul className="space-y-2 text-sm">
-                <li><Link href="/pretraga" className="hover:text-white transition-colors">Pregled dostupnih providera</Link></li>
-                <li><Link href="/usporedba" className="hover:text-white transition-colors">Tablična Usporedba</Link></li>
+                <li><Link href="/trziste" className="hover:text-white transition-colors">Pregled dostupnih providera</Link></li>
+                <li><Link href="/pretraga" className="hover:text-white transition-colors">Tablična Usporedba</Link></li>
               </ul>
             </div>
 
@@ -138,7 +138,7 @@ function HomeContent() {
             </div>
           </div>
           
-          <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 pr-20">
+          <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 sm:pr-20">
             <div className="flex gap-4">
                 {/* Social icons styled minimally */}
                 {['Twitter', 'Instagram', 'LinkedIn'].map((social) => (

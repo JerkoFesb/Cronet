@@ -53,12 +53,12 @@ export const Pagination: React.FC<PaginationProps> = ({
           }`}
           disabled={isFirstPage}
         >
-          Prev
+          Prethodna
         </button>
 
-        <p className="text-gray-700">
-          Page{" "}
-          <span className="font-semibold text-gray-900">{currentPage}</span> of{" "}
+        <p className="text-gray-700 text-sm sm:text-base">
+          Stranica{" "}
+          <span className="font-semibold text-gray-900">{currentPage}</span> od{" "}
           <span className="font-semibold text-gray-900">{totalPages}</span>
         </p>
 
@@ -71,7 +71,7 @@ export const Pagination: React.FC<PaginationProps> = ({
           }`}
           disabled={isLastPage}
         >
-          Next
+          Sljedeća
         </button>
       </div>
     </div>

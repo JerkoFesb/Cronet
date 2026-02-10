@@ -1,187 +1,130 @@
 import Link from "next/link";
-import { PageStatusGuard } from "@/app/_components/PageStatusGuard";
 
 export default function Page() {
   return (
-    <PageStatusGuard slug="pocetna">
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-gradient-to-b from-[#E6F3FF] to-white">
+      {/* TEST BANNER */}
+      <div className="bg-red-600 text-white text-center py-4 text-2xl font-bold">
+        🔴 TEST - Promjena je vidljiva! 🔴
+      </div>
       {/* Hero Section */}
-      <main className="container mx-auto px-4 sm:px-6 md:px-10 pt-12 md:pt-20 pb-16 md:pb-24 relative overflow-hidden">
-        
-        {/* Abstract Background Shapes */}
-        <div className="absolute top-0 right-0 -z-10 w-[600px] h-[600px] bg-blue-100 rounded-full blur-3xl opacity-50 translate-x-1/2 -translate-y-1/4"></div>
-        <div className="absolute bottom-0 left-0 -z-10 w-[600px] h-[600px] bg-indigo-100 rounded-full blur-3xl opacity-50 -translate-x-1/2 translate-y-1/4"></div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <main className="relative container mx-auto px-10 pt-16 pb-20 overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Left Side - Hero Content */}
-          <div className="space-y-8 relative z-10">
-            <div className="inline-flex items-center gap-2 bg-white border border-blue-100 text-blue-600 px-4 py-1.5 rounded-full text-sm font-semibold shadow-sm">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-              </span>
+          <div className="space-y-6">
+            <div className="inline-block bg-[#D4E9FF] text-[#4A90E2] px-4 py-2 rounded-lg text-sm font-medium">
               Pametni izbor interneta
             </div>
             
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-slate-900 leading-[1.1] tracking-tight">
-              Pronađi savršen internet paket <br className="hidden lg:block"/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-                bez glavobolje.
-              </span>
+            <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+              Ne ostavljaj svoj internet slučaju - pronađi najbolji paket za svoj dom u samo par klikova.
             </h1>
             
-            <p className="text-lg md:text-xl text-slate-600 leading-relaxed max-w-xl">
-              Uspoređujemo ponude svih top pružatelja u Hrvatskoj. Nema skrivenih troškova, samo transparentne cijene i brzine.
+            <p className="text-lg text-gray-700 leading-relaxed">
+              CroNet uspoređuje ponude svih glavnih internet pružatelja u Hrvatskoj i pomaže vam odabrati najbolju opciju za vaše potrebe.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Link 
                 href="/pretraga" 
-                className="inline-flex items-center justify-center bg-blue-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-700 hover:-translate-y-0.5 transition-all duration-200 shadow-lg shadow-blue-600/20 text-base"
+                className="inline-block bg-[#1E1B8F] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#2E2BA0] transition text-center"
               >
-                Usporedi pakete
+                Otkrij ponude za tebe
               </Link>
               <Link 
                 href="/pomoc" 
-                className="inline-flex items-center justify-center text-slate-700 bg-white border border-slate-200 px-8 py-4 rounded-xl font-semibold hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 text-base"
+                className="inline-block text-[#4A90E2] px-8 py-4 rounded-lg font-semibold hover:underline transition text-center"
               >
-                Kako funkcionira?
+                Saznaj kako CroNet radi →
               </Link>
-            </div>
-
-            <div className="pt-8 flex items-center gap-6 text-sm text-slate-500">
-              <div className="flex -space-x-2">
-                <div className="w-8 h-8 rounded-full bg-slate-200 border-2 border-white"></div>
-                <div className="w-8 h-8 rounded-full bg-slate-300 border-2 border-white"></div>
-                <div className="w-8 h-8 rounded-full bg-slate-400 border-2 border-white"></div>
-              </div>
-              <p>Pridruži se <span className="font-bold text-slate-900">10,000+</span> zadovoljnih korisnika</p>
             </div>
           </div>
 
           {/* Right Side - Top Offers Card */}
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-3xl rotate-1 opacity-10 scale-105 blur-lg"></div>
+          <div className="bg-white rounded-2xl shadow-xl p-8 space-y-6">
+            <h2 className="text-2xl font-bold text-gray-900 text-center">Top ponude</h2>
             
-            <div className="relative bg-white rounded-3xl shadow-2xl p-6 sm:p-8 space-y-8 border border-slate-100">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-6">
-                <div>
-                  <h2 className="text-xl font-bold text-slate-900">Top Preporuke</h2>
-                  <p className="text-slate-500 text-sm mt-1">Ažurirano danas</p>
-                </div>
-                <span className="bg-green-100 text-green-700 text-xs px-2.5 py-1 rounded-full font-bold uppercase tracking-wide">Live</span>
-              </div>
-              
-              <div className="space-y-4">
-                {/* Offer 1 */}
-                <div className="group flex items-center p-4 rounded-2xl border border-slate-100 bg-slate-50/50 hover:bg-blue-50/50 hover:border-blue-200 transition-all duration-200 cursor-pointer">
-                  <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white font-bold text-lg shadow-sm group-hover:scale-110 transition-transform">T</div>
-                  <div className="ml-4 flex-1">
-                    <h3 className="font-bold text-slate-900">T-HOME Supernet</h3>
-                    <div className="flex items-center gap-3 mt-1 text-xs text-slate-500">
-                      <span className="flex items-center gap-1">⚡ 300 Mbps</span>
-                      <span className="w-1 h-1 rounded-full bg-slate-300"></span>
-                      <span>Neograničeno</span>
-                    </div>
+            {/* T-HOME Offer */}
+            <div className="border-2 border-gray-200 rounded-xl p-6 space-y-3 hover:border-[#4A90E2] transition">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="bg-[#E20074] text-white w-12 h-12 rounded-lg flex items-center justify-center font-bold text-xl">
+                    T
                   </div>
-                  <div className="text-right">
-                    <div className="text-lg font-bold text-slate-900">€24.99</div>
-                    <div className="text-xs text-slate-500">mjesečno</div>
+                  <div>
+                    <h3 className="font-bold text-lg text-gray-900">T-HOME</h3>
+                    <p className="text-gray-600 text-sm">Supernet paket</p>
+                    <p className="text-gray-500 text-sm">300 Mbps</p>
                   </div>
                 </div>
-
-                {/* Offer 2 */}
-                <div className="group flex items-center p-4 rounded-2xl border border-slate-100 bg-white hover:bg-blue-50/50 hover:border-blue-200 transition-all duration-200 cursor-pointer shadow-sm hover:shadow">
-                  <div className="h-12 w-12 rounded-xl bg-[#2C2C2C] flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:scale-110 transition-transform">A1</div>
-                  <div className="ml-4 flex-1">
-                    <h3 className="font-bold text-slate-900">A1 Brzi Net</h3>
-                    <div className="flex items-center gap-3 mt-1 text-xs text-slate-500">
-                      <span className="flex items-center gap-1">⚡ 200 Mbps</span>
-                      <span className="w-1 h-1 rounded-full bg-slate-300"></span>
-                      <span>Wifi 6</span>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-lg font-bold text-slate-900">€21.99</div>
-                    <div className="text-xs text-slate-500">mjesečno</div>
-                  </div>
-                </div>
-
-                {/* Offer 3 */}
-                <div className="group flex items-center p-4 rounded-2xl border border-slate-100 bg-white hover:bg-blue-50/50 hover:border-blue-200 transition-all duration-200 cursor-pointer shadow-sm hover:shadow">
-                  <div className="h-12 w-12 rounded-xl bg-orange-500 flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:scale-110 transition-transform">T2</div>
-                  <div className="ml-4 flex-1">
-                    <h3 className="font-bold text-slate-900">Telemach Optika</h3>
-                    <div className="flex items-center gap-3 mt-1 text-xs text-slate-500">
-                      <span className="flex items-center gap-1">⚡ 1 Gbps</span>
-                      <span className="w-1 h-1 rounded-full bg-slate-300"></span>
-                      <span>HBO Gratis</span>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-lg font-bold text-slate-900">€26.50</div>
-                    <div className="text-xs text-slate-500">mjesečno</div>
-                  </div>
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-gray-900">€24<span className="text-lg">,99</span><span className="text-sm font-normal">/mj.</span></div>
                 </div>
               </div>
+              <button className="w-full bg-[#E6F3FF] text-[#4A90E2] py-2 rounded-lg font-medium hover:bg-[#4A90E2] hover:text-white transition">
+                Najbolji odabir
+              </button>
+            </div>
 
-              <Link href="/pretraga" className="block w-full py-3.5 bg-slate-900 text-white text-center rounded-xl font-medium hover:bg-slate-800 transition-colors">
-                Pogledaj sve ponude
-              </Link>
+            {/* VIP Offer */}
+            <div className="border-2 border-gray-200 rounded-xl p-6 space-y-3 hover:border-[#4A90E2] transition">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="bg-black text-white w-12 h-12 rounded-full flex items-center justify-center font-bold">
+                    vip
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-lg text-gray-900">VIP</h3>
+                    <p className="text-gray-600 text-sm">Brzi paket</p>
+                    <p className="text-gray-500 text-sm">200 Mbps</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-gray-900">€21<span className="text-lg">,99</span><span className="text-sm font-normal">/mj.</span></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+
+        {/* Decorative circles in background */}
+        <div className="absolute top-20 right-20 w-96 h-96 bg-[#D4E9FF] rounded-full opacity-30 blur-3xl -z-10"></div>
+        <div className="absolute bottom-40 left-10 w-72 h-72 bg-[#D4E9FF] rounded-full opacity-40 blur-3xl -z-10"></div>
       </main>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
-        <div className="container mx-auto px-4 sm:px-6 md:px-10">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="md:col-span-2 space-y-4">
-              <h2 className="text-2xl font-bold text-white tracking-tight">CroNet</h2>
-              <p className="text-sm leading-relaxed max-w-sm">
-                Vaš pouzdani vodič kroz svijet telekomunikacija. Pomažemo vam uštedjeti novac i pronaći najbolju uslugu.
-              </p>
-              <p className="text-xs opacity-50 pt-4">© 2024 CroNet d.d. Sva prava pridržana.</p>
+      <footer className="bg-[#A8C5E0] py-8 mt-20">
+        <div className="container mx-auto px-10">
+          <div className="flex justify-between items-center">
+            <div className="space-y-2">
+              <h2 className="text-3xl font-bold text-white">CroNet</h2>
+              <p className="text-white text-sm">© CroNet d.d. (Inc) Sva prava pridržana</p>
             </div>
             
-            <div className="space-y-4">
-              <h3 className="text-white font-semibold">Usluge</h3>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/pretraga" className="hover:text-white transition-colors">Usporedba interneta</Link></li>
-                <li><Link href="/pretraga" className="hover:text-white transition-colors">Mobilne tarife</Link></li>
-                <li><Link href="/pretraga" className="hover:text-white transition-colors">TV paketi</Link></li>
-                <li><Link href="/usporedba" className="hover:text-white transition-colors">Poslovni korisnici</Link></li>
-              </ul>
-            </div>
-
-            <div className="space-y-4">
-              <h3 className="text-white font-semibold">Podrška</h3>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/pomoc" className="hover:text-white transition-colors">Centar za pomoć</Link></li>
-                <li><Link href="/pomoc" className="hover:text-white transition-colors">Kontakt</Link></li>
-                <li><Link href="/pomoc" className="hover:text-white transition-colors">O nama</Link></li>
-                <li><Link href="/pomoc" className="hover:text-white transition-colors">Uvjeti korištenja</Link></li>
-              </ul>
-            </div>
-          </div>
-          
-          <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div className="flex gap-4">
-                {/* Social icons styled minimally */}
-                {['Twitter', 'Instagram', 'LinkedIn'].map((social) => (
-                  <a key={social} href="#" className="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-slate-700 transition-colors" aria-label={social}>
-                    <span className="w-4 h-4 rounded-full bg-slate-400"></span>
-                  </a>
-                ))}
-            </div>
-            <div className="text-xs text-slate-500">
-              Made with ❤️ in Croatia
+            <div className="flex gap-8 items-start">
+              <div className="space-y-2">
+                <Link href="/pomoc" className="block text-white hover:underline">O nama</Link>
+                <Link href="/pomoc" className="block text-white hover:underline">Kontaktirajte nas</Link>
+              </div>
+              
+              <div className="flex gap-4">
+                <a href="#" className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#4A90E2] hover:bg-gray-100 transition">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </a>
+                <a href="#" className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#4A90E2] hover:bg-gray-100 transition">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                </a>
+                <a href="#" className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#4A90E2] hover:bg-gray-100 transition">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm4.441 16.892c-2.102.144-6.784.144-8.883 0C5.282 16.736 5.017 15.622 5 12c.017-3.629.285-4.736 2.558-4.892 2.099-.144 6.782-.144 8.883 0C18.718 7.264 18.982 8.378 19 12c-.018 3.629-.285 4.736-2.559 4.892zM10 9.658l4.917 2.338L10 14.342V9.658z"/></svg>
+                </a>
+                <a href="#" className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#4A90E2] hover:bg-gray-100 transition">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </footer>
     </div>
-    </PageStatusGuard>
   );
 } 
