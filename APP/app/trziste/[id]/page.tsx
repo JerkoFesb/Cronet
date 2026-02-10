@@ -188,11 +188,9 @@ export default function TrzisteProviderPage() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
-      {/* Hero */}
       <section className="relative overflow-hidden">
         <div className={`absolute inset-0 bg-gradient-to-br ${style.accent} opacity-5`} />
         <div className="container mx-auto px-4 sm:px-6 md:px-10 pt-8 md:pt-12 pb-10">
-          {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-sm text-slate-500 mb-8">
             <Link href="/trziste" className="hover:text-blue-600 transition-colors">
               Pružatelji
@@ -237,7 +235,6 @@ export default function TrzisteProviderPage() {
       </section>
 
       <div className="container mx-auto px-4 sm:px-6 md:px-10 pb-16 md:pb-24">
-        {/* Summary Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           <div className="bg-white rounded-2xl border border-slate-100 p-5">
             <p className="text-xs text-slate-500 mb-1">Cijena</p>
@@ -273,9 +270,7 @@ export default function TrzisteProviderPage() {
           </div>
         </div>
 
-        {/* Scores + Cities */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
-          {/* Scores */}
           <div className="lg:col-span-1 bg-white rounded-2xl border border-slate-100 p-6">
             <h2 className="text-lg font-bold text-slate-900 mb-5">Prosječne ocjene</h2>
             <div className="space-y-4">
@@ -286,7 +281,6 @@ export default function TrzisteProviderPage() {
             </div>
           </div>
 
-          {/* Cities */}
           <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-100 p-6">
             <h2 className="text-lg font-bold text-slate-900 mb-5">Dostupnost po gradovima</h2>
             <div className="flex flex-wrap gap-2">
@@ -302,7 +296,6 @@ export default function TrzisteProviderPage() {
           </div>
         </div>
 
-        {/* Package List */}
         <div className="bg-white rounded-2xl border border-slate-100 p-6 md:p-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
             <h2 className="text-xl font-bold text-slate-900">Paketi</h2>
@@ -335,7 +328,6 @@ export default function TrzisteProviderPage() {
                   className="border border-slate-100 rounded-xl p-5 hover:border-blue-200 hover:bg-blue-50/30 transition-all"
                 >
                   <div className="flex flex-col md:flex-row md:items-center gap-4">
-                    {/* Package info */}
                     <div className="flex-1">
                       <div className="flex items-center gap-3 flex-wrap">
                         <h3 className="font-bold text-slate-900">{pkg.packageName}</h3>
@@ -359,7 +351,6 @@ export default function TrzisteProviderPage() {
                       )}
                     </div>
 
-                    {/* Price and extras */}
                     <div className="flex flex-col items-end gap-1 min-w-[140px]">
                       <div className="text-2xl font-bold text-slate-900">€{pkg.priceEur.toFixed(2)}</div>
                       <div className="text-xs text-slate-500">mjesečno</div>
@@ -376,7 +367,6 @@ export default function TrzisteProviderPage() {
                     </div>
                   </div>
 
-                  {/* Tags */}
                   <div className="flex flex-wrap gap-2 mt-4 pt-3 border-t border-slate-50">
                     {pkg.tvIncluded && (
                       <span className="text-xs bg-purple-50 text-purple-700 px-2 py-0.5 rounded-full">📺 TV uključen</span>
@@ -413,7 +403,6 @@ export default function TrzisteProviderPage() {
           </div>
         </div>
 
-        {/* Back link */}
         <div className="mt-10 text-center">
           <Link
             href="/trziste"

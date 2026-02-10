@@ -17,9 +17,8 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Cache session data to avoid redundant fetches
 let sessionCache: { user: User; timestamp: number } | null = null;
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+const CACHE_TTL = 5 * 60 * 1000;
 
 export function AuthProvider({ children, initialUser }: { children: React.ReactNode; initialUser?: User }) {
   const [user, setUserState] = useState<User>(initialUser ?? null);
@@ -27,10 +26,8 @@ export function AuthProvider({ children, initialUser }: { children: React.ReactN
   const fetchingRef = useRef(false);
   const mountedRef = useRef(true);
 
-  // Memoized setUser to prevent unnecessary re-renders
   const setUser = useCallback((u: User) => {
     setUserState(u);
-    // Update cache when user is set
     if (u) {
       sessionCache = { user: u, timestamp: Date.now() };
     } else {
@@ -39,10 +36,8 @@ export function AuthProvider({ children, initialUser }: { children: React.ReactN
   }, []);
 
   const fetchSession = useCallback(async (force = false) => {
-    // Prevent concurrent fetches
     if (fetchingRef.current) return;
     
-    // Use cache if valid and not forcing refresh
     if (!force && sessionCache && (Date.now() - sessionCache.timestamp) < CACHE_TTL) {
       if (mountedRef.current) {
         setUserState(sessionCache.user);
@@ -56,7 +51,6 @@ export function AuthProvider({ children, initialUser }: { children: React.ReactN
     try {
       const response = await fetch('/api/auth/get-session', {
         credentials: 'include',
-        // Use cache for subsequent requests
         cache: 'no-store',
       });
       
@@ -97,12 +91,10 @@ export function AuthProvider({ children, initialUser }: { children: React.ReactN
     }
   }, []);
 
-  // Initial session check - skip if we have initialUser from SSR
   useEffect(() => {
     mountedRef.current = true;
     
     if (initialUser) {
-      // We already have user from SSR, cache it
       sessionCache = { user: initialUser, timestamp: Date.now() };
       setLoading(false);
     } else {
@@ -130,7 +122,6 @@ export function AuthProvider({ children, initialUser }: { children: React.ReactN
     await fetchSession(true);
   }, [fetchSession]);
 
-  // Memoize context value to prevent unnecessary re-renders
   const contextValue = useMemo(() => ({
     user,
     setUser,

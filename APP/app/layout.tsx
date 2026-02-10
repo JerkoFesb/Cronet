@@ -28,24 +28,20 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Resolve session on the server to avoid hydration flicker in the header
   let initialUser: { name?: string; email?: string } | null = null;
   try {
     const hdrs = await headers();
     const sessionPromise = auth.api.getSession({ headers: hdrs });
-    // Add a timeout so a slow/dead DB doesn't block the entire page render
     const timeout = new Promise<null>((resolve) => setTimeout(() => resolve(null), 3000));
     const session = await Promise.race([sessionPromise, timeout]);
     if (session?.user) {
       initialUser = { name: session.user.name, email: session.user.email };
     }
   } catch {
-    // Fail silently; client will revalidate
   }
   return (
     <html lang="en" style={{ colorScheme: 'light only' }}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {/* Wrap the whole app UI with AuthProvider so header/navigation can use auth state */}
         <AuthProvider initialUser={initialUser}>
           <header className="fixed top-0 left-0 right-0 z-50 bg-white">
             <Navigation />

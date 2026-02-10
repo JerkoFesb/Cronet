@@ -17,14 +17,12 @@ export default function Toast() {
     setVisible(true);
     const t = setTimeout(() => {
       setVisible(false);
-      // remove query params without navigating away
       try {
         const url = new URL(window.location.href);
         url.searchParams.delete("toast");
         url.searchParams.delete("name");
         router.replace(url.pathname + url.search);
       } catch (e) {
-        // fallback: just replace with pathname
         router.replace(window.location.pathname);
       }
     }, 3000);

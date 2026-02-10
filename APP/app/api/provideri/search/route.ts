@@ -1,4 +1,3 @@
-// app/api/provideri/search/route.ts
 import { db } from "@/db";
 import { provideri } from "@/db/schema";
 import { NextResponse } from "next/server";
@@ -8,12 +7,9 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     
-    // Ako ima ID parametar, dohvati samo taj provider
     const id = searchParams.get("id");
     if (id) {
-      console.log('[Provideri API] Fetching by ID:', id);
       const result = await db.select().from(provideri).where(eq(provideri.id, id)).limit(1);
-      console.log('[Provideri API] Found:', result.length);
       return NextResponse.json({
         success: true,
         count: result.length,
@@ -21,26 +17,14 @@ export async function GET(req: Request) {
       });
     }
     
-    // Parametri pretrage
     const city = searchParams.get("city")?.toLowerCase();
     const minSpeed = searchParams.get("minSpeed") ? parseInt(searchParams.get("minSpeed")!) : null;
     const maxPrice = searchParams.get("maxPrice") ? parseFloat(searchParams.get("maxPrice")!) : null;
-    const accessType = searchParams.get("accessType")?.toUpperCase(); // FTTH, DOCSIS, DSL, 5G
+    const accessType = searchParams.get("accessType")?.toUpperCase();
     const provider = searchParams.get("provider");
-    const sortBy = searchParams.get("sortBy") || "price"; // price, speed, gaming, streaming
+    const sortBy = searchParams.get("sortBy") || "price";
     const limit = searchParams.get("limit") ? parseInt(searchParams.get("limit")!) : 20;
 
-    console.log('[Provideri API] Search params:', {
-      city,
-      minSpeed,
-      maxPrice,
-      accessType,
-      provider,
-      sortBy,
-      limit
-    });
-
-    // Kreiraj WHERE uslove
     const conditions = [];
 
     if (city) {
@@ -68,7 +52,6 @@ export async function GET(req: Request) {
       conditions.push(ilike(provideri.providerName, `%${provider}%`));
     }
 
-    // Determine sort order
     let orderByClause;
     if (sortBy === "price") {
       orderByClause = asc(provideri.priceEur);
@@ -83,18 +66,15 @@ export async function GET(req: Request) {
     } else if (sortBy === "family") {
       orderByClause = desc(provideri.scoreFamily);
     } else {
-      orderByClause = asc(provideri.priceEur); // default
+      orderByClause = asc(provideri.priceEur);
     }
 
-    // Query with ordering built-in
     const results = await db
       .select()
       .from(provideri)
       .where(conditions.length > 0 ? and(...conditions) : undefined)
       .orderBy(orderByClause)
       .limit(limit);
-
-    console.log(`[Provideri API] Found ${results.length} results`);
 
     return NextResponse.json({
       success: true,

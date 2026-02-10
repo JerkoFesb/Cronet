@@ -7,8 +7,6 @@ export const sanityClient = createClient({
   useCdn: process.env.NODE_ENV === 'production',
 })
 
-// Check if a page is enabled (returns true/false)
-// Uses API route with no-store caching for fresh data
 export async function isPageEnabled(slug: string): Promise<boolean> {
   try {
     const baseUrl = process.env.VERCEL_URL 
@@ -20,17 +18,13 @@ export async function isPageEnabled(slug: string): Promise<boolean> {
     })
     const data = await response.json()
     const page = data.pages?.find((p: any) => p.slug === slug)
-    const enabled = page?.enabled === true
-    
-    console.log(`[isPageEnabled] slug="${slug}" -> enabled=${enabled}`, { page })
-    return enabled
+    return page?.enabled === true
   } catch (error) {
     console.error('[sanity] isPageEnabled error:', error)
-    return true // Default to enabled if API is down
+    return true
   }
 }
 
-// Get all page statuses (for navbar visibility, etc)
 export async function getPageStatuses() {
   try {
     const baseUrl = process.env.VERCEL_URL 

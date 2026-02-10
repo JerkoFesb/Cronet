@@ -10,20 +10,16 @@ function HomeContent() {
     <PageStatusGuard slug="home">
     <>
       <Toast />
-      {/* Prefetch podataka iz baze u pozadini za brzi pristup na pretraga stranici */}
       <PrefetchProviders />
       
-      {/* Hero Section */}
       <main className="container mx-auto px-4 sm:px-6 md:px-10 pt-12 md:pt-20 pb-16 md:pb-24 relative overflow-hidden">
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-          {/* Left Side - Hero Content (Old Design) */}
           <div className="space-y-4">
             <div className="inline-block bg-[#D4E9FF] text-[#4A90E2] px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium">
               Pametni izbor interneta
             </div>
             
-            {/* Fixed height container to prevent content jumping during typewriter effect */}
             <div className="min-h-[160px] sm:min-h-[180px] md:min-h-[200px] lg:min-h-[220px]">
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
                 <TypewriterText 
@@ -53,7 +49,6 @@ function HomeContent() {
             </div>
           </div>
 
-          {/* Right Side - Top Offers Card - Wrapped in Suspense for skeleton loading */}
           <Suspense fallback={<SkeletonCard />}>
             <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 border-2 border-gray-100">
             <div className="bg-gradient-to-r from-[#4A90E2] to-[#1E1B8F] -mx-4 sm:-mx-6 md:-mx-8 -mt-4 sm:-mt-6 md:-mt-8 px-4 sm:px-6 md:px-8 py-4 rounded-t-2xl mb-4">
@@ -61,7 +56,6 @@ function HomeContent() {
               <p className="text-white/80 text-sm text-center mt-1">Najbolje ocijenjeni paketi</p>
             </div>
             
-            {/* T-HOME Offer */}
             <a href="https://www.t.ht.hr/" target="_blank" rel="noopener noreferrer" className="block border-2 border-gray-200 rounded-xl p-4 sm:p-6 space-y-3 hover:border-[#4A90E2] transition cursor-pointer">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-0">
                 <div className="flex items-center gap-3">
@@ -83,7 +77,6 @@ function HomeContent() {
               </div>
             </a>
 
-            {/* VIP Offer */}
             <a href="https://www.a1.hr/" target="_blank" rel="noopener noreferrer" className="block border-2 border-gray-200 rounded-xl p-4 sm:p-6 space-y-3 hover:border-[#4A90E2] transition cursor-pointer">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-0">
                 <div className="flex items-center gap-3">
@@ -105,12 +98,10 @@ function HomeContent() {
           </Suspense>
         </div>
 
-        {/* Decorative circles in background (Old Design) */}
         <div className="hidden sm:block absolute top-20 right-10 md:right-20 w-48 md:w-72 lg:w-96 h-48 md:h-72 lg:h-96 bg-[#D4E9FF] rounded-full opacity-30 blur-3xl -z-10"></div>
         <div className="hidden sm:block absolute bottom-40 left-5 md:left-10 w-36 md:w-56 lg:w-72 h-36 md:h-56 lg:h-72 bg-[#D4E9FF] rounded-full opacity-40 blur-3xl -z-10"></div>
       </main>
 
-      {/* Footer (New Design) */}
       <footer className="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
         <div className="container mx-auto px-4 sm:px-6 md:px-10">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -140,7 +131,6 @@ function HomeContent() {
           
           <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 sm:pr-20">
             <div className="flex gap-4">
-                {/* Social icons styled minimally */}
                 {['Twitter', 'Instagram', 'LinkedIn'].map((social) => (
                   <a key={social} href="#" className="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-slate-700 transition-colors" aria-label={social}>
                     <span className="w-4 h-4 rounded-full bg-slate-400"></span>
@@ -168,13 +158,11 @@ export default async function Home() {
   );
 }
 
-// Skeleton loader for the entire home page
 function SkeletonHome() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#EBF5FF] via-[#F5F9FF] to-white flex flex-col">
       <main className="container mx-auto px-4 sm:px-6 md:px-10 pt-12 md:pt-20 pb-16 md:pb-24 relative overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-          {/* Left Side Skeleton */}
           <div className="space-y-4">
             <div className="h-6 w-40 bg-gray-300 rounded animate-pulse"></div>
             <div className="h-16 w-full bg-gray-300 rounded animate-pulse"></div>
@@ -185,7 +173,6 @@ function SkeletonHome() {
             </div>
           </div>
           
-          {/* Right Side Skeleton */}
           <SkeletonCard />
         </div>
       </main>
@@ -193,7 +180,6 @@ function SkeletonHome() {
   );
 }
 
-// Skeleton loader for the offers card
 function SkeletonCard() {
   return (
     <div className="relative bg-white rounded-3xl shadow-xl p-6 sm:p-8 space-y-8 border border-slate-100">
@@ -202,7 +188,6 @@ function SkeletonCard() {
         <div className="h-6 w-12 bg-slate-200 rounded-full animate-pulse"></div>
       </div>
       
-      {/* Offer Skeletons */}
       {[1, 2, 3].map((i) => (
         <div key={i} className="flex items-center p-4 rounded-2xl border border-slate-100 bg-slate-50/50">
           <div className="h-12 w-12 bg-slate-200 rounded-xl animate-pulse flex-shrink-0"></div>

@@ -61,26 +61,15 @@ export default function UsporedbaPage() {
 
     const fetchProviders = async () => {
       try {
-        console.log('[Usporedba] Fetching providers:', providerIds);
         const responses = await Promise.all(
           providerIds.map(id =>
             fetch(`/api/provideri/search?id=${encodeURIComponent(id)}`)
-              .then(res => {
-                console.log(`[Usporedba] Response for ID ${id}:`, res.status);
-                return res.json();
-              })
-              .then(data => {
-                console.log(`[Usporedba] Data for ID ${id}:`, data);
-                return data.results?.[0];
-              })
-              .catch(err => {
-                console.error(`[Usporedba] Error fetching ID ${id}:`, err);
-                return null;
-              })
+              .then(res => res.json())
+              .then(data => data.results?.[0])
+              .catch(() => null)
           )
         );
 
-        console.log('[Usporedba] All responses:', responses);
         const validProviders = responses.filter(Boolean);
         if (validProviders.length === 0) {
           setError("Provideri nisu pronađeni. Provjerite URL.");
@@ -89,7 +78,6 @@ export default function UsporedbaPage() {
         }
       } catch (err: any) {
         setError("Greška pri učitavanju providera: " + err.message);
-        console.error(err);
       } finally {
         setIsLoading(false);
       }
@@ -145,7 +133,6 @@ export default function UsporedbaPage() {
     );
   }
 
-  // Računanje preporuka
   const getRecommendations = () => {
     const recommendations = {
       bestGaming: providers.reduce((best, p) => p.scoreGaming > best.scoreGaming ? p : best),
@@ -179,7 +166,6 @@ export default function UsporedbaPage() {
           <p className="text-sm sm:text-base text-gray-600">Detaljno poređenje odabranih mrežnih providera</p>
         </div>
 
-        {/* AI Recommendations */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-6 md:mb-8">
           <div className="bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl p-4 sm:p-6 text-white shadow-lg hover:shadow-xl transition">
             <div className="text-2xl sm:text-3xl mb-2">🏆</div>
@@ -242,7 +228,6 @@ export default function UsporedbaPage() {
           </div>
         </div>
 
-        {/* Ai Insights */}
         <div className="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-xl p-4 sm:p-6 md:p-8 mb-6 md:mb-8 border-2 border-indigo-200">
           <div className="flex flex-col sm:flex-row items-start gap-4">
             <div className="text-3xl sm:text-4xl md:text-5xl">🤖</div>
@@ -280,7 +265,6 @@ export default function UsporedbaPage() {
           </div>
         </div>
 
-        {/* Provider Headers - Sticky na vrhu */}
         <div className="overflow-x-auto mb-6 md:mb-8 -mx-4 sm:mx-0 px-4 sm:px-0">
           <div className="grid gap-3 sm:gap-4" style={{ gridTemplateColumns: `repeat(${providers.length}, minmax(250px, 1fr))`, minWidth: providers.length > 1 ? '500px' : 'auto' }}>
             {providers.map(provider => (
@@ -303,9 +287,7 @@ export default function UsporedbaPage() {
           </div>
         </div>
 
-        {/* Comparison Table */}
         <div className="space-y-3 sm:space-y-4">
-          {/* Brzine */}
           <div className="bg-white rounded-lg shadow-md overflow-hidden">
             <div className="bg-gray-100 px-4 sm:px-6 py-2 sm:py-3 font-bold text-gray-800 border-l-4 border-[#4CAF82] text-sm sm:text-base">
               ⚡ Brzina i performanse
@@ -330,7 +312,6 @@ export default function UsporedbaPage() {
             </div>
           </div>
 
-          {/* Cijena */}
           <div className="bg-white rounded-lg shadow-md overflow-hidden">
             <div className="bg-gray-100 px-4 sm:px-6 py-2 sm:py-3 font-bold text-gray-800 border-l-4 border-green-500 text-sm sm:text-base">
               💰 Cijena
@@ -360,7 +341,6 @@ export default function UsporedbaPage() {
             </div>
           </div>
 
-          {/* Ocjene */}
           <div className="bg-white rounded-lg shadow-md overflow-hidden">
             <div className="bg-gray-100 px-4 sm:px-6 py-2 sm:py-3 font-bold text-gray-800 border-l-4 border-blue-500 text-sm sm:text-base">
               ⭐ Ocjene za različite namjene
@@ -418,7 +398,6 @@ export default function UsporedbaPage() {
             </div>
           </div>
 
-          {/* Opcije */}
           <div className="bg-white rounded-lg shadow-md overflow-hidden">
             <div className="bg-gray-100 px-4 sm:px-6 py-2 sm:py-3 font-bold text-gray-800 border-l-4 border-yellow-500 text-sm sm:text-base">
               ✨ Dodatne opcije
@@ -472,7 +451,6 @@ export default function UsporedbaPage() {
             </div>
           </div>
 
-          {/* CTA */}
           <div className="mt-6 md:mt-8">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Kontaktiraj Providera</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">

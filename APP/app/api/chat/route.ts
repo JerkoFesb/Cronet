@@ -1,4 +1,3 @@
-// app/api/chat/route.ts
 import Groq from 'groq-sdk';
 import { NextResponse } from 'next/server';
 
@@ -10,7 +9,6 @@ export async function POST(req: Request) {
   try {
     const { messages, context } = await req.json();
 
-    // Validacija
     if (!messages || !Array.isArray(messages)) {
       return NextResponse.json(
         { error: 'Messages array is required' },
@@ -18,7 +16,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // Provjeri API key
     if (!process.env.GROQ_API_KEY) {
       console.error('[Chat API] GROQ_API_KEY not configured');
       return NextResponse.json(
@@ -27,7 +24,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // Dinamički kontekst iz forme
     const userContext = context ? `
 
 KORISNIKOV KONTEKST (uzmi ovo u obzir pri odgovaranju):
@@ -39,7 +35,6 @@ ${context.tehnickoZnanje ? `- Tehničko znanje: ${context.tehnickoZnanje}` : ''}
 ${context.potrebe ? `- Potrebe: ${context.potrebe}` : ''}
 ` : '';
 
-    // System prompt sa kontekstom o CroNet-u
     const systemPrompt = {
       role: 'system',
       content: `Ti si CroNet AI asistent, stručnjak za internet mreže u Hrvatskoj. 
@@ -137,11 +132,8 @@ NAČIN ODGOVARANJA:
 Odgovaraj kratko (3-5 rečenica max), direktno, na hrvatskom. Fokusiraj se na ono što korisnik pita.`
     };
 
-    console.log('[Chat API] Calling Groq with', messages.length, 'messages');
-
-    // Pozovi Groq API (besplatno i brže od OpenAI!)
     const response = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile', // Besplatni model, odličan za chat
+      model: 'llama-3.3-70b-versatile',
       messages: [systemPrompt, ...messages] as any,
       temperature: 0.7,
       max_tokens: 500,
@@ -149,14 +141,11 @@ Odgovaraj kratko (3-5 rečenica max), direktno, na hrvatskom. Fokusiraj se na on
 
     const message = response.choices[0]?.message?.content || 'Nema odgovora.';
 
-    console.log('[Chat API] ✅ Response received');
-
     return NextResponse.json({ message });
 
   } catch (error: any) {
-    console.error('[Chat API] ❌ Error:', error);
+    console.error('[Chat API] Error:', error);
     
-    // Detaljnije error poruke
     if (error?.error?.message) {
       return NextResponse.json(
         { error: error.error.message },

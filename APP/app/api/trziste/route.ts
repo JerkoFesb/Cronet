@@ -1,4 +1,3 @@
-// app/api/trziste/route.ts
 import { db } from "@/db";
 import { provideri } from "@/db/schema";
 import { NextResponse } from "next/server";
@@ -7,9 +6,8 @@ import { eq, sql, asc, desc } from "drizzle-orm";
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
-    const slug = searchParams.get("slug"); // provider name slug
+    const slug = searchParams.get("slug");
 
-    // If slug is provided, fetch all packages for that provider
     if (slug) {
       const providerName = slug.replace(/-/g, " ");
 
@@ -26,7 +24,6 @@ export async function GET(req: Request) {
         );
       }
 
-      // Aggregate provider info
       const name = packages[0].providerName;
       const cities = [...new Set(packages.map((p) => p.city))].sort();
       const accessTypes = [...new Set(packages.map((p) => p.accessType))].sort();
@@ -103,10 +100,8 @@ export async function GET(req: Request) {
       });
     }
 
-    // No slug — return list of unique providers with summary info
     const allPackages = await db.select().from(provideri).orderBy(asc(provideri.providerName));
 
-    // Group by provider name
     const providerMap = new Map<
       string,
       {

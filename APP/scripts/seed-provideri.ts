@@ -1,4 +1,3 @@
-// scripts/seed-provideri.ts
 import 'dotenv/config';
 import { db } from "../db";
 import { provideri } from "../db/schema";
@@ -41,23 +40,18 @@ async function seedProvideri() {
   try {
     console.log('🌱 Seeding provideri...');
 
-    // Čitaj CSV file
     const csvPath = path.join(process.cwd(), 'db', 'seed-data', 'provideri.csv');
     const csvContent = fs.readFileSync(csvPath, 'utf-8');
 
-    // Parsiraj CSV
     const records = parse(csvContent, {
       columns: true,
       skip_empty_lines: true,
       cast: (value, context) => {
-        // Konvertiraj prazne stringove u null
         if (value === '') return null;
         
-        // Konvertiraj boolean vrijednosti
         if (value === 'true') return true;
         if (value === 'false') return false;
         
-        // Konvertiraj brojeve
         if (context.column === 'downloadMbps' || 
             context.column === 'uploadMbps' || 
             context.column === 'latencyMs' || 
@@ -71,7 +65,6 @@ async function seedProvideri() {
           return value ? parseInt(value) : null;
         }
         
-        // Konvertiraj decimalne brojeve
         if (context.column === 'packetLossPercent' || 
             context.column === 'priceEur' ||
             context.column === 'installationFeeEur') {
@@ -84,7 +77,6 @@ async function seedProvideri() {
 
     console.log(`📊 Found ${records.length} records in CSV`);
 
-    // Umetni u bazu
     for (const record of records) {
       await db.insert(provideri).values(record).onConflictDoNothing();
       console.log(`✅ Inserted: ${record.providerName} - ${record.packageName} (${record.city})`);

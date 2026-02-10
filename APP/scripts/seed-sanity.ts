@@ -11,7 +11,6 @@ const pages = [
 async function seedPages() {
   try {
     for (const page of pages) {
-      // Check if page already exists
       const exists = await sanityClient.fetch(
         `*[_type == "pageStatus" && slug.current == $slug][0]._id`,
         { slug: page.slug }
@@ -22,7 +21,6 @@ async function seedPages() {
         continue
       }
 
-      // Create new page
       const doc = {
         _type: 'pageStatus',
         title: page.title,

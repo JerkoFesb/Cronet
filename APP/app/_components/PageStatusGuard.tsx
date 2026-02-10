@@ -25,13 +25,10 @@ export function PageStatusGuard({ slug, children }: PageStatusGuardProps) {
         const data = await res.json();
         const page = data.pages?.find((p: PageStatus) => p.slug === slug);
         
-        // If page not found in Sanity (unpublished), treat as disabled
-        // Page must exist AND be enabled to show
         const enabled = page?.enabled === true;
         setIsEnabled(enabled);
       } catch (error) {
         console.error('Failed to fetch page status:', error);
-        // Default to enabled if API is down (fail open)
         setIsEnabled(true);
       } finally {
         setIsLoading(false);
@@ -41,7 +38,6 @@ export function PageStatusGuard({ slug, children }: PageStatusGuardProps) {
     checkPageStatus();
   }, [slug]);
 
-  // Show loading state briefly
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -50,7 +46,6 @@ export function PageStatusGuard({ slug, children }: PageStatusGuardProps) {
     );
   }
 
-  // Page is disabled - show 404
   if (isEnabled === false) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
@@ -68,6 +63,5 @@ export function PageStatusGuard({ slug, children }: PageStatusGuardProps) {
     );
   }
 
-  // Page is enabled - render children
   return <>{children}</>;
 }

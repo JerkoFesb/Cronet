@@ -20,12 +20,10 @@ export default function PretragaPage() {
     parseAsInteger.withDefault(1).withOptions({ shallow: false })
   );
   
-  // Prefetch hook za brzi pristup podacima
   const { getFirstPage, getAllProviders, isCacheValid } = usePrefetchedProviders();
   const prefetchChecked = useRef(false);
   const resultsRef = useRef<HTMLDivElement>(null);
 
-  // Form state
   const [formData, setFormData] = useState({
     lokacija: "",
     brzina: "",
@@ -34,13 +32,11 @@ export default function PretragaPage() {
   });
   const [tehnickoZnanje, setTehnickoZnanje] = useState<"početnik" | "srednje" | "napredno">("srednje");
 
-  // Results state
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [searchPerformed, setSearchPerformed] = useState(false);
   const [prefetchedDataAvailable, setPrefetchedDataAvailable] = useState(false);
 
-  // Comparison state
   const [selectedProviders, setSelectedProviders] = useState<string[]>([]);
   const [isCompareButtonVisible, setIsCompareButtonVisible] = useState(true);
   const [isHoveringFloating, setIsHoveringFloating] = useState(false);
@@ -48,7 +44,6 @@ export default function PretragaPage() {
   const compareButtonNodeRef = useRef<HTMLDivElement | null>(null);
   const compareObserverRef = useRef<IntersectionObserver | null>(null);
   const compareButtonRef = useCallback((node: HTMLDivElement | null) => {
-    // Cleanup previous observer
     if (compareObserverRef.current) {
       compareObserverRef.current.disconnect();
       compareObserverRef.current = null;
@@ -64,36 +59,29 @@ export default function PretragaPage() {
       observer.observe(node);
       compareObserverRef.current = observer;
     } else {
-      // Element removed from DOM — inline bar not rendered, so not visible
       setIsCompareButtonVisible(false);
     }
   }, []);
   const chatRef = useRef<HTMLDivElement>(null);
 
-  // Provjeri prefetch-ane podatke pri učitavanju stranice
   useEffect(() => {
     if (typeof window === "undefined" || prefetchChecked.current) return;
     prefetchChecked.current = true;
 
-    // Ako već imamo search rezultate (npr. iz sessionStorage), ne koristi prefetch
     const saved = sessionStorage.getItem("pretraga-state");
     if (saved) return;
 
-    // Provjeri ima li prefetch-anih podataka
     const firstPage = getFirstPage();
     const allProviders = getAllProviders();
     
     if (firstPage && firstPage.length > 0) {
-      console.log("[PretragaPage] Using prefetched first page data:", firstPage.length, "providers");
       setPrefetchedDataAvailable(true);
     }
     
     if (allProviders && allProviders.length > 0) {
-      console.log("[PretragaPage] Prefetched all providers available:", allProviders.length, "providers");
     }
   }, [getFirstPage, getAllProviders]);
 
-  // Restore last search when returning to the page (e.g. back from detalji)
   useEffect(() => {
     if (typeof window === "undefined") return;
     const saved = sessionStorage.getItem("pretraga-state");
@@ -108,7 +96,6 @@ export default function PretragaPage() {
         void setPage(parsed.page);
       }
     } catch (err) {
-      console.error("[PretragaPage] Failed to restore search state", err);
     }
   }, [setPage]);
 
@@ -127,7 +114,6 @@ export default function PretragaPage() {
     }
   }, [currentPage, totalPages, setPage]);
 
-  // Scroll to results when page changes
   useEffect(() => {
     if (searchPerformed && resultsRef.current && currentPage > 1) {
       resultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -144,7 +130,6 @@ export default function PretragaPage() {
     }));
   }, [formData, searchResults, searchPerformed, safePage]);
 
-  // Restore and save selected providers
   const [compareRestored, setCompareRestored] = useState(false);
 
   useEffect(() => {
@@ -154,7 +139,6 @@ export default function PretragaPage() {
       try {
         setSelectedProviders(JSON.parse(saved));
       } catch (err) {
-        console.error("Failed to restore selected providers", err);
       }
     }
     setCompareRestored(true);
@@ -165,7 +149,6 @@ export default function PretragaPage() {
     sessionStorage.setItem("compare-selected", JSON.stringify(selectedProviders));
   }, [selectedProviders, compareRestored]);
 
-  // Cleanup observer on unmount
   useEffect(() => {
     return () => {
       if (compareObserverRef.current) {
@@ -193,7 +176,6 @@ export default function PretragaPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [messagesLoaded, setMessagesLoaded] = useState(false);
 
-  // Load chat messages from localStorage on mount
   useEffect(() => {
     if (typeof window === "undefined") return;
     const savedMessages = localStorage.getItem('cronet_chat_messages');
@@ -202,38 +184,29 @@ export default function PretragaPage() {
         const parsed = JSON.parse(savedMessages);
         if (Array.isArray(parsed) && parsed.length > 0) {
           setMessages(parsed);
-          console.log('[Chat] Loaded', parsed.length, 'messages from localStorage');
         }
       } catch (e) {
-        console.error('Error loading chat from localStorage:', e);
       }
     }
     setMessagesLoaded(true);
   }, []);
 
-  // Save chat messages to localStorage whenever they change (keep last 20)
   const updateMessages = (newMessages: Array<{role: "user" | "assistant", content: string}>) => {
     setMessages(newMessages);
-    // Keep only last 20 messages
     const toStore = newMessages.slice(-20);
     if (typeof window !== "undefined") {
       localStorage.setItem('cronet_chat_messages', JSON.stringify(toStore));
-      console.log('[Chat] Saved', toStore.length, 'messages to localStorage');
     }
   };
 
-  // Auto-save messages to localStorage whenever they change
   useEffect(() => {
-    if (messagesLoaded && messages.length > 1) { // Only save if there are messages beyond the default greeting
+    if (messagesLoaded && messages.length > 1) {
       const toStore = messages.slice(-20);
       if (typeof window !== "undefined") {
         localStorage.setItem('cronet_chat_messages', JSON.stringify(toStore));
       }
     }
   }, [messages, messagesLoaded]);
-
-  // Debug logging
-  console.log('[PretragaPage] loading:', loading, 'user:', user);
 
   if (loading) {
     return (
@@ -295,14 +268,11 @@ export default function PretragaPage() {
     setSearchPerformed(true);
 
     try {
-      // Provjeri ima li filtera - ako nema, koristi prefetch-ane podatke
       const hasFilters = formData.lokacija || formData.brzina || formData.cijena || formData.tip;
       
       if (!hasFilters && isCacheValid()) {
-        // Nema filtera, koristi prefetch-ane podatke ako postoje
         const allProviders = getAllProviders();
         if (allProviders && allProviders.length > 0) {
-          console.log('[Search] Using prefetched data:', allProviders.length, 'providers');
           setSearchResults(allProviders);
           const nextPage = 1;
           void setPage(nextPage);
@@ -313,7 +283,6 @@ export default function PretragaPage() {
             page: nextPage,
           }));
           setIsSearching(false);
-          // Scroll do rezultata
           setTimeout(() => {
             resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }, 50);
@@ -321,13 +290,11 @@ export default function PretragaPage() {
         }
       }
 
-      // Kreiraj query parametre
       const params = new URLSearchParams();
       if (formData.lokacija) params.append("city", formData.lokacija);
       if (formData.brzina) params.append("minSpeed", formData.brzina);
       if (formData.cijena) params.append("maxPrice", formData.cijena);
       if (formData.tip) {
-        // Mapiranje tip mreže na accessType
         const typeMap: Record<string, string> = {
           "optika": "FTTH",
           "adsl": "DSL",
@@ -336,9 +303,7 @@ export default function PretragaPage() {
         };
         params.append("accessType", typeMap[formData.tip] || formData.tip);
       }
-      params.append("sortBy", "price"); // Default sortiranje po cijeni
-
-      console.log('[Search] Querying:', params.toString());
+      params.append("sortBy", "price");
 
       const response = await fetch(`/api/provideri/search?${params.toString()}`);
       
@@ -357,14 +322,10 @@ export default function PretragaPage() {
         page: nextPage,
       }));
       
-      console.log(`[Search] Found ${data.count} results`);
-      
-      // Scroll do rezultata
       setTimeout(() => {
         resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 50);
     } catch (error: any) {
-      console.error('[Search] Error:', error);
       alert('Greška pri pretraz: ' + error.message);
     } finally {
       setIsSearching(false);
@@ -376,14 +337,12 @@ export default function PretragaPage() {
     const messageToSend = quickMessage || inputMessage;
     if (!messageToSend.trim() || isLoading) return;
 
-    // Dodaj korisničku poruku
     const userMessage = { role: "user" as const, content: messageToSend };
     const newMessages = [...messages, userMessage];
     updateMessages(newMessages);
     setInputMessage("");
     setIsLoading(true);
 
-    // Pripremi kontekst iz forme
     const context = {
       lokacija: formData.lokacija,
       brzina: formData.brzina,
@@ -397,8 +356,6 @@ export default function PretragaPage() {
     };
 
     try {
-      console.log('[Chat] Sending message with context:', context);
-      
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -415,14 +372,11 @@ export default function PretragaPage() {
 
       const data = await response.json();
       
-      console.log('[Chat] ✅ Received response');
-      
       updateMessages([...newMessages, { 
         role: "assistant" as const, 
         content: data.message 
       }]);
     } catch (error: any) {
-      console.error('[Chat] ❌ Error:', error);
       updateMessages([...newMessages, { 
         role: "assistant" as const, 
         content: "Ups! Došlo je do greške. " + (error.message || "Pokušajte ponovno.") 
@@ -432,14 +386,13 @@ export default function PretragaPage() {
     }
   };
 
-  // Logika za smart tips
   const getSmartTip = () => {
     const hasLocation = formData.lokacija.trim() !== "";
     const hasBrzina = formData.brzina !== "";
     const hasCijena = formData.cijena !== "";
     const hasTip = formData.tip !== "";
     const filledFields = [hasLocation, hasBrzina, hasCijena, hasTip].filter(Boolean).length;
-    const hasAskedAI = messages.length > 1; // Više od početne poruke
+    const hasAskedAI = messages.length > 1;
 
     if (filledFields === 0 && !hasAskedAI) {
       return {
@@ -499,7 +452,6 @@ export default function PretragaPage() {
   return (
     <PageStatusGuard slug="pretraga">
     <div className="min-h-screen bg-gray-100 p-4 sm:p-6 md:p-8">
-      {/* Smart Progress Bar sa Savjetima */}
       <div className={`mb-4 sm:mb-6 p-3 sm:p-4 rounded-lg border-2 ${currentTip.color} transition-all duration-300`}>
         <div className="flex flex-col sm:flex-row items-start gap-3">
           <span className="text-xl sm:text-2xl">{currentTip.icon}</span>
@@ -508,7 +460,6 @@ export default function PretragaPage() {
             <p className="text-xs sm:text-sm">{currentTip.message}</p>
           </div>
           
-          {/* Progress indicator */}
           <div className="flex flex-row sm:flex-col items-center sm:items-end gap-2 sm:gap-1 w-full sm:w-auto">
             <span className="text-xs font-semibold opacity-70">Progres</span>
             <div className="flex gap-1">
@@ -526,7 +477,6 @@ export default function PretragaPage() {
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
-        {/* LIJEVA STRANA - FORMA */}
         <div className="lg:col-span-7 flex">
           <div className="bg-white rounded-xl shadow-xl border border-gray-200 p-4 sm:p-6 md:p-8 flex flex-col w-full" style={{minHeight: "500px"}}>
             <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-gray-800">Filtriraj mreže</h2>
@@ -542,7 +492,6 @@ export default function PretragaPage() {
                   value={formData.lokacija}
                   onChange={(e) => {
                     const v = e.target.value;
-                    // Samo slova hrvatske abecede, razmaci i crtice, max 50 znakova
                     if (v.length > 50) return;
                     if (v !== "" && !/^[a-zA-ZčćšžđČĆŠŽĐ\s-]*$/.test(v)) return;
                     setFormData({...formData, lokacija: v});
@@ -628,7 +577,6 @@ export default function PretragaPage() {
                   Pretraži
                 </button>
                 
-                {/* Brzi gumb za prikaz svih ponuda ako ima prefetch-anih podataka */}
                 {prefetchedDataAvailable && !searchPerformed && (
                   <button
                     type="button"
@@ -656,7 +604,6 @@ export default function PretragaPage() {
           </div>
         </div>
 
-        {/* DESNA STRANA - CHATBOT (3/4 širine lijeve forme) */}
         <div data-chat-section ref={chatRef} className="lg:col-span-5 flex lg:sticky lg:top-24 self-start">
           <div className="bg-white rounded-xl shadow-xl border border-gray-200 p-4 sm:p-6 flex flex-col w-full" style={{minHeight: "500px", maxHeight: "calc(100vh - 200px)"}}>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-4 pb-4 border-b">
@@ -671,7 +618,6 @@ export default function PretragaPage() {
                 </p>
               </div>
               
-              {/* Tehničko znanje selector */}
               <div className="flex flex-col items-start sm:items-end gap-1 w-full sm:w-auto">
                 <label className="text-xs text-gray-600 font-medium whitespace-nowrap">
                   Razina iskustva sa mrežama
@@ -688,7 +634,6 @@ export default function PretragaPage() {
               </div>
             </div>
 
-            {/* Quick action buttons */}
             <div className="mb-3 flex flex-wrap gap-2">
               <button
                 onClick={(e) => handleSendMessage(e, "Koja brzina mi treba za gaming?")}
@@ -720,7 +665,6 @@ export default function PretragaPage() {
               </button>
             </div>
 
-            {/* Chat messages sa auto-scroll */}
             <div className="flex-1 overflow-y-auto mb-4 space-y-3 scroll-smooth">
               {messages.map((msg, idx) => (
                 <div
@@ -739,7 +683,6 @@ export default function PretragaPage() {
                 </div>
               ))}
               
-              {/* Loading indicator */}
               {isLoading && (
                 <div className="flex justify-start">
                   <div className="max-w-[80%] px-4 py-2 rounded-lg bg-gray-100 text-gray-800 rounded-bl-none">
@@ -753,7 +696,6 @@ export default function PretragaPage() {
               )}
             </div>
 
-            {/* Input form */}
             <form onSubmit={handleSendMessage} className="flex gap-2">
               <input
                 type="text"
@@ -775,7 +717,6 @@ export default function PretragaPage() {
         </div>
       </div>
 
-      {/* Rezultati pretrage */}
       <div ref={resultsRef} className="mt-8 sm:mt-12 scroll-mt-20">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0 mb-4 sm:mb-6">
           <h2 className="text-xl sm:text-2xl font-bold">
@@ -901,7 +842,6 @@ export default function PretragaPage() {
                       )}
                     </div>
 
-                    {/* Ocjene */}
                     <div className="flex flex-wrap gap-2 sm:gap-4 mb-3">
                       <div className="flex items-center gap-1">
                         <span>🎮</span>
@@ -1000,14 +940,12 @@ export default function PretragaPage() {
         )}
       </div>
 
-      {/* Sticky floating compare button - prikazuje se kada originalni nije vidljiv */}
       {!isCompareButtonVisible && selectedProviders.length > 0 && (
         <div 
           className="sticky-compare-button animate-slide-up"
           onMouseEnter={() => setIsHoveringFloating(true)}
           onMouseLeave={() => setIsHoveringFloating(false)}
         >
-          {/* Tooltip sa imenima odabranih providera */}
           {isHoveringFloating && (
             <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-xl text-sm max-w-md">
               <div className="font-semibold mb-1">Odabrani provideri:</div>

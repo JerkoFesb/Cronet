@@ -6,7 +6,6 @@ export async function GET() {
     const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
     const query = encodeURIComponent(`*[_type == "navigationItem"] | order(order asc) {title, path}`)
     
-    // Direct fetch to Sanity API without any caching
     const url = `https://${projectId}.api.sanity.io/v2025-01-01/data/query/${dataset}?query=${query}`
     
     const response = await fetch(url, {

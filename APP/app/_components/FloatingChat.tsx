@@ -20,14 +20,12 @@ export function FloatingChat({ onOpenPretragaChat, isPretragaChatOpen }: Floatin
   const [isLoading, setIsLoading] = useState(false);
   const [messagesLoaded, setMessagesLoaded] = useState(false);
   
-  // Drag state
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [hasBeenDragged, setHasBeenDragged] = useState(false);
   const chatPanelRef = useRef<HTMLDivElement>(null);
 
-  // Reset drag state when panel closes
   useEffect(() => {
     if (!isOpen) {
       setHasBeenDragged(false);
@@ -40,7 +38,6 @@ export function FloatingChat({ onOpenPretragaChat, isPretragaChatOpen }: Floatin
         (e.target as HTMLElement).tagName === 'TEXTAREA') {
       return;
     }
-    // On first drag, capture the current CSS position and switch to left/top positioning
     if (!hasBeenDragged && chatPanelRef.current) {
       const rect = chatPanelRef.current.getBoundingClientRect();
       setPosition({ x: rect.left, y: rect.top });
@@ -67,10 +64,9 @@ export function FloatingChat({ onOpenPretragaChat, isPretragaChatOpen }: Floatin
     const newX = e.clientX - dragStart.x;
     const newY = e.clientY - dragStart.y;
     
-    // Keep within viewport bounds
     const panelWidth = 320; 
     const panelHeight = 500; 
-    const maxX = window.innerWidth; // Dopusti da ide do kraja + malo dalje
+    const maxX = window.innerWidth;
     const maxY = window.innerHeight - panelHeight;
     
     setPosition({
@@ -94,7 +90,6 @@ export function FloatingChat({ onOpenPretragaChat, isPretragaChatOpen }: Floatin
     }
   }, [isDragging, dragStart, position]);
 
-  // Load chat messages from localStorage on mount (samo za ne-pretraga stranice)
   useEffect(() => {
     if (isPretragaPage || typeof window === "undefined") return;
     
@@ -112,7 +107,6 @@ export function FloatingChat({ onOpenPretragaChat, isPretragaChatOpen }: Floatin
     setMessagesLoaded(true);
   }, [isPretragaPage]);
 
-  // Save messages to localStorage (samo za ne-pretraga stranice)
   useEffect(() => {
     if (isPretragaPage || !messagesLoaded || messages.length <= 1) return;
     
@@ -176,20 +170,16 @@ export function FloatingChat({ onOpenPretragaChat, isPretragaChatOpen }: Floatin
 
   const handleButtonClick = () => {
     if (isPretragaPage && onOpenPretragaChat) {
-      // Na pretraga stranici, otvori postojeći chat
       onOpenPretragaChat();
     } else {
-      // Na drugim stranicama, otvori floating chat
       setIsOpen(!isOpen);
     }
   };
 
-  // Ne prikazuj floating chat panel ako smo na pretraga stranici
   const showFloatingPanel = !isPretragaPage && isOpen;
 
   return (
     <>
-      {/* Chat Panel - samo na drugim stranicama */}
       {showFloatingPanel && (
         <div 
           ref={chatPanelRef}
@@ -205,7 +195,6 @@ export function FloatingChat({ onOpenPretragaChat, isPretragaChatOpen }: Floatin
             cursor: 'grab'
           }}
         >
-          {/* Header */}
           <div className="bg-gradient-to-r from-[#4CAF82] to-[#45a076] text-white p-3 rounded-t-2xl flex justify-between items-center cursor-grab">
             <div>
               <h3 className="font-bold text-base">CroNet AI</h3>
@@ -227,7 +216,6 @@ export function FloatingChat({ onOpenPretragaChat, isPretragaChatOpen }: Floatin
             </div>
           </div>
 
-          {/* Messages */}
           <div className="flex-1 overflow-y-auto p-3 space-y-2">
             {messages.map((msg, idx) => (
               <div
@@ -254,7 +242,6 @@ export function FloatingChat({ onOpenPretragaChat, isPretragaChatOpen }: Floatin
             )}
           </div>
 
-          {/* Input */}
           <form onSubmit={handleSendMessage} className="p-3 border-t border-gray-200">
             <div className="flex gap-2">
               <input
@@ -277,14 +264,11 @@ export function FloatingChat({ onOpenPretragaChat, isPretragaChatOpen }: Floatin
         </div>
       )}
 
-      {/* Floating Button sa labelom */}
       <div className="fixed bottom-6 right-6 flex flex-col items-center gap-2 z-50">
-        {/* Label */}
         <div className="bg-white px-3 py-1 rounded-full shadow-lg border border-gray-200">
           <span className="text-xs font-semibold text-gray-700">AI asistent</span>
         </div>
         
-        {/* Button */}
         <button
           onClick={handleButtonClick}
           className={`w-14 h-14 bg-gradient-to-r from-[#4CAF82] to-[#45a076] text-white rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center ${

@@ -4,29 +4,20 @@ import { useEffect } from "react";
 
 const PREFETCH_CACHE_KEY = "cronet_prefetch_providers";
 const PREFETCH_TIMESTAMP_KEY = "cronet_prefetch_timestamp";
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minuta
+const CACHE_DURATION = 5 * 60 * 1000;
 
-/**
- * Komponenta koja prefetch-a providere iz baze podataka u pozadini
- * čim se stranica učita. Podaci se spremaju u sessionStorage za brzi pristup.
- */
 export function PrefetchProviders() {
   useEffect(() => {
     const prefetchData = async () => {
       try {
-        // Provjeri da li već imamo svježe podatke u cache-u
         const cachedTimestamp = sessionStorage.getItem(PREFETCH_TIMESTAMP_KEY);
         if (cachedTimestamp) {
           const age = Date.now() - parseInt(cachedTimestamp, 10);
           if (age < CACHE_DURATION) {
-            console.log("[Prefetch] Cache is fresh, skipping prefetch");
             return;
           }
         }
-
-        console.log("[Prefetch] Starting background data prefetch...");
         
-        // Dohvati prvih 5 providera za prvu stranicu (sortirano po cijeni)
         const firstPagePromise = fetch("/api/provideri/search?limit=5&sortBy=price")
           .then(res => res.json())
           .then(data => {
@@ -35,11 +26,9 @@ export function PrefetchProviders() {
                 `${PREFETCH_CACHE_KEY}_first_page`,
                 JSON.stringify(data.results)
               );
-              console.log(`[Prefetch] First page cached: ${data.results.length} providers`);
             }
           });
 
-        // Dohvati sve providere za ostale stranice (u pozadini)
         const allProvidersPromise = fetch("/api/provideri/search?limit=100&sortBy=price")
           .then(res => res.json())
           .then(data => {
@@ -49,13 +38,10 @@ export function PrefetchProviders() {
                 JSON.stringify(data.results)
               );
               sessionStorage.setItem(PREFETCH_TIMESTAMP_KEY, Date.now().toString());
-              console.log(`[Prefetch] All providers cached: ${data.results.length} providers`);
             }
           });
 
-        // Prvih 5 ima prioritet
         await firstPagePromise;
-        // Ostali se dohvaćaju u pozadini
         await allProvidersPromise;
         
       } catch (error) {
@@ -63,8 +49,6 @@ export function PrefetchProviders() {
       }
     };
 
-    // Koristi requestIdleCallback za prefetch kad je browser "idle"
-    // ili setTimeout kao fallback
     if ("requestIdleCallback" in window) {
       (window as any).requestIdleCallback(() => prefetchData(), { timeout: 2000 });
     } else {
@@ -72,13 +56,9 @@ export function PrefetchProviders() {
     }
   }, []);
 
-  // Ova komponenta ne renderira ništa
   return null;
 }
 
-/**
- * Hook za pristup prefetch-anim podacima
- */
 export function usePrefetchedProviders() {
   const getFirstPage = (): any[] | null => {
     if (typeof window === "undefined") return null;

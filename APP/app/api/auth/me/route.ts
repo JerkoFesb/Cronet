@@ -6,12 +6,10 @@ const handler = toNextJsHandler(auth);
 
 export async function GET(req: Request) {
   try {
-    // Some handlers expose GET to return session info — forward if available
     if (typeof (handler as any).GET === "function") {
       return await (handler as any).GET(req);
     }
 
-    // Fallback: respond with null to indicate no user
     return NextResponse.json(null);
   } catch (err: any) {
     console.error("/api/auth/me error", err);

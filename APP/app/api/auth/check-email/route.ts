@@ -3,9 +3,8 @@ import * as schema from "@/db/schema";
 import { sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
-// In-memory cache for email checks (short TTL)
 const emailCache = new Map<string, { exists: boolean; timestamp: number }>();
-const CACHE_TTL = 30 * 1000; // 30 seconds
+const CACHE_TTL = 30 * 1000;
 
 export async function GET(req: Request) {
   try {
@@ -15,7 +14,6 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "missing email" }, { status: 400 });
     }
 
-    // Check cache first
     const cached = emailCache.get(email);
     if (cached && (Date.now() - cached.timestamp) < CACHE_TTL) {
       return NextResponse.json(
@@ -29,7 +27,6 @@ export async function GET(req: Request) {
       );
     }
 
-    // Use a case-insensitive match: compare lower(column) to the lowercased input
     const rows = await db
       .select({ id: schema.user.id })
       .from(schema.user)
@@ -38,10 +35,8 @@ export async function GET(req: Request) {
 
     const exists = rows.length > 0;
     
-    // Update cache
     emailCache.set(email, { exists, timestamp: Date.now() });
     
-    // Clean old entries periodically (keep cache small)
     if (emailCache.size > 1000) {
       const now = Date.now();
       for (const [key, value] of emailCache.entries()) {

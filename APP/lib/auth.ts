@@ -1,11 +1,15 @@
-// lib/auth.ts
 import { betterAuth } from "better-auth";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";   // ako koristiš Drizzle
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/db/index"
 import * as schema from "@/db/schema";
-// ili prismaAdapter, kyselyAdapter, mongodbAdapter, ...
 
 export const auth = betterAuth({
+  baseURL: process.env.AUTH_URL,
+  trustedOrigins: [
+    "http://localhost:3000",
+    "https://cronet.vercel.app",
+  ],
+
   database: drizzleAdapter(db, {
     provider: "pg",
     schema,
@@ -13,8 +17,6 @@ export const auth = betterAuth({
 
   emailAndPassword: {
     enabled: true,
-    // Faster password hashing (10 rounds instead of default 12)
-    // Still secure but ~4x faster login
     password: {
       hash: async (password) => {
         const bcrypt = await import('bcryptjs');
@@ -33,13 +35,4 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     },
   },
-
-  // korisni pluginovi (dodaj po potrebi)
-  plugins: [
-    // twoFactor(),               // 2FA
-    // organization(),            // multi-tenant / timovi
-    // passkey(),                 // WebAuthn / passkeys
-  ],
-
-  // session: { strategy: "jwt" },   // default je JWT + cookie
 });

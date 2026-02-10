@@ -55,7 +55,6 @@ export default function DetaljiProvidera() {
 
   const handleCompare = () => {
     if (provider) {
-      // Dohvati postojeće odabrane providere
       const saved = sessionStorage.getItem("compare-selected");
       let selected: string[] = [];
       
@@ -67,15 +66,12 @@ export default function DetaljiProvidera() {
         }
       }
       
-      // Dodaj trenutni provider ako nije već dodan
       if (!selected.includes(provider.id)) {
         selected.push(provider.id);
       }
       
-      // Spremi ažurirane odabrane providere
       sessionStorage.setItem("compare-selected", JSON.stringify(selected));
       
-      // Idi na pretragu stranicu
       router.push("/pretraga");
     }
   };
@@ -113,7 +109,6 @@ export default function DetaljiProvidera() {
         </Link>
 
         <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden">
-          {/* Hero Header */}
           <div className="bg-gradient-to-r from-[#4A90E2] to-[#3A7BC8] p-4 sm:p-6 md:p-8 text-white relative overflow-hidden">
             <div className="hidden sm:block absolute top-0 right-0 w-48 md:w-64 h-48 md:h-64 bg-white/10 rounded-full -mr-24 md:-mr-32 -mt-24 md:-mt-32"></div>
             <div className="hidden sm:block absolute bottom-0 left-0 w-36 md:w-48 h-36 md:h-48 bg-white/10 rounded-full -ml-18 md:-ml-24 -mb-18 md:-mb-24"></div>
@@ -154,7 +149,6 @@ export default function DetaljiProvidera() {
             </div>
           </div>
 
-          {/* Stats Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 p-4 sm:p-6 bg-gray-50">
             <div className="bg-white p-3 sm:p-4 rounded-xl shadow-sm hover:shadow-md transition text-center">
               <div className="text-2xl sm:text-3xl mb-1 sm:mb-2">⬇️</div>
@@ -178,7 +172,6 @@ export default function DetaljiProvidera() {
             </div>
           </div>
 
-          {/* Promotion Banner */}
           {provider.promotionActive && provider.promotionDetails && (
             <div className="bg-gradient-to-r from-red-50 to-orange-50 border-l-4 border-red-500 p-4 sm:p-6 mx-4 sm:mx-6 my-4 sm:my-6 rounded-xl">
               <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
@@ -191,9 +184,7 @@ export default function DetaljiProvidera() {
             </div>
           )}
 
-          {/* Main Content */}
           <div className="p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8">
-            {/* Description */}
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">O paketu</h2>
               <div className="bg-blue-50 p-4 sm:p-6 rounded-xl border border-blue-100">
@@ -209,7 +200,6 @@ export default function DetaljiProvidera() {
               </div>
             </div>
 
-            {/* Features Grid */}
             <div>
               <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Prednosti</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
@@ -254,7 +244,6 @@ export default function DetaljiProvidera() {
               </div>
             </div>
 
-            {/* Technical Details */}
             <div>
               <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Tehnički detalji</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
@@ -308,7 +297,6 @@ export default function DetaljiProvidera() {
               </div>
             </div>
 
-            {/* CTA Section */}
             <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl border border-gray-200">
               <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
                 <div className="text-center md:text-left">

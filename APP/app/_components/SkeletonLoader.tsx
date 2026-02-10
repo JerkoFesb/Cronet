@@ -36,7 +36,6 @@ export function DetailPageSkeleton() {
     <div className="min-h-screen bg-gradient-to-br from-[#EBF5FF] via-[#F5F9FF] to-white">
       <div className="container mx-auto px-4 sm:px-6 md:px-10 py-8 md:py-16">
         <div className="bg-white rounded-2xl shadow-xl p-8 animate-pulse">
-          {/* Header */}
           <div className="flex items-start gap-6 mb-8">
             <div className="w-24 h-24 bg-gray-200 rounded-xl"></div>
             <div className="flex-1">
@@ -50,7 +49,6 @@ export function DetailPageSkeleton() {
             </div>
           </div>
 
-          {/* Content sections */}
           <div className="space-y-6">
             <div>
               <div className="h-6 bg-gray-200 rounded w-40 mb-4"></div>
@@ -80,7 +78,6 @@ export function DetailPageSkeleton() {
             </div>
           </div>
 
-          {/* Action buttons */}
           <div className="mt-8 flex gap-4">
             <div className="h-12 bg-gray-200 rounded flex-1"></div>
             <div className="h-12 bg-gray-200 rounded w-32"></div>

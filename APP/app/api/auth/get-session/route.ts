@@ -6,7 +6,6 @@ export async function GET(req: Request) {
   const startTime = Date.now();
   
   try {
-    // Get session using better-auth
     const session = await auth.api.getSession({
       headers: await headers(),
     });
@@ -24,7 +23,6 @@ export async function GET(req: Request) {
         }
       }, {
         headers: {
-          // Private cache - only browser can cache, not CDN
           'Cache-Control': 'private, max-age=60, stale-while-revalidate=300',
           'X-Response-Time': `${responseTime}ms`,
         }

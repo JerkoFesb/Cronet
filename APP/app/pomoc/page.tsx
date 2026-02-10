@@ -6,7 +6,6 @@ export default function Page() {
     <main className="min-h-screen w-full bg-gradient-to-br from-[#EBF5FF] via-[#F5F9FF] to-white">
       <div className="px-4 sm:px-6 md:px-10 pt-16 sm:pt-24 pb-16 sm:pb-24 max-w-5xl mx-auto">
         
-        {/* Hero Section - Largest visual weight */}
         <header className="text-center mb-16 sm:mb-20">
           <span className="inline-block bg-[#4A90E2]/10 text-[#4A90E2] px-4 py-2 rounded-full text-sm font-semibold tracking-wide uppercase">
             Pomoć i podrška
@@ -18,7 +17,6 @@ export default function Page() {
             Brzo pronađi odgovore na pitanja ili nas kontaktiraj direktno.
           </p>
 
-          {/* Quick nav - Secondary importance */}
           <nav className="mt-8 sm:mt-10 flex flex-wrap justify-center gap-3">
             <a href="#upute" className="px-6 py-3 rounded-xl bg-white text-gray-700 border border-gray-200 hover:border-[#4A90E2] hover:text-[#4A90E2] transition-all font-medium shadow-sm">
               📖 Upute za korištenje
@@ -32,7 +30,6 @@ export default function Page() {
           </nav>
         </header>
 
-        {/* Upute Section - Step by step with clear visual hierarchy */}
         <section id="upute" className="mb-16 sm:mb-20 scroll-mt-28">
           <div className="flex items-center gap-3 mb-8">
             <div className="h-10 w-10 rounded-xl bg-[#4A90E2] flex items-center justify-center text-white text-xl">
@@ -41,13 +38,10 @@ export default function Page() {
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Kako koristiti CroNet</h2>
           </div>
           
-          {/* Steps - Numbered with connecting line visual */}
           <div className="relative">
-            {/* Connecting line */}
             <div className="hidden sm:block absolute left-[39px] top-8 bottom-8 w-0.5 bg-gradient-to-b from-[#4A90E2] to-[#4A90E2]/20"></div>
             
             <div className="space-y-6">
-              {/* Step 1 */}
               <div className="flex gap-4 sm:gap-6 items-start">
                 <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#4A90E2] text-white flex items-center justify-center text-2xl sm:text-3xl font-bold shadow-lg shadow-[#4A90E2]/30 z-10">
                   1
@@ -58,7 +52,6 @@ export default function Page() {
                 </div>
               </div>
 
-              {/* Step 2 */}
               <div className="flex gap-4 sm:gap-6 items-start">
                 <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#4A90E2]/80 text-white flex items-center justify-center text-2xl sm:text-3xl font-bold shadow-lg shadow-[#4A90E2]/20 z-10">
                   2
@@ -69,7 +62,6 @@ export default function Page() {
                 </div>
               </div>
 
-              {/* Step 3 */}
               <div className="flex gap-4 sm:gap-6 items-start">
                 <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#4A90E2]/60 text-white flex items-center justify-center text-2xl sm:text-3xl font-bold shadow-lg shadow-[#4A90E2]/10 z-10">
                   3
@@ -80,7 +72,6 @@ export default function Page() {
                 </div>
               </div>
 
-              {/* Step 4 */}
               <div className="flex gap-4 sm:gap-6 items-start">
                 <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#4A90E2]/40 text-white flex items-center justify-center text-2xl sm:text-3xl font-bold shadow-lg z-10">
                   4
@@ -94,7 +85,6 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Kontakt Section - Clear call to action */}
         <section id="kontakt" className="scroll-mt-28">
           <div className="flex items-center gap-3 mb-8">
             <div className="h-10 w-10 rounded-xl bg-[#4CAF82] flex items-center justify-center text-white text-xl">
@@ -111,7 +101,6 @@ export default function Page() {
             
             <div className="p-6 sm:p-8">
               <div className="grid sm:grid-cols-3 gap-6">
-                {/* Email */}
                 <a href="mailto:jzlopa00@fesb.hr" className="flex flex-col items-center p-6 rounded-2xl bg-gray-50 hover:bg-[#4A90E2]/5 transition-colors group">
                   <div className="w-14 h-14 rounded-full bg-[#4A90E2]/10 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                     📧
@@ -120,7 +109,6 @@ export default function Page() {
                   <span className="mt-1 text-[#4A90E2] text-sm">jzlopa00@fesb.hr</span>
                 </a>
 
-                {/* Phone */}
                 <a href="tel:+385924203347" className="flex flex-col items-center p-6 rounded-2xl bg-gray-50 hover:bg-[#4A90E2]/5 transition-colors group">
                   <div className="w-14 h-14 rounded-full bg-[#4A90E2]/10 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                     📞
@@ -129,7 +117,6 @@ export default function Page() {
                   <span className="mt-1 text-[#4A90E2] text-sm">092 420 3347</span>
                 </a>
 
-                {/* Hours */}
                 <div className="flex flex-col items-center p-6 rounded-2xl bg-gray-50">
                   <div className="w-14 h-14 rounded-full bg-[#4A90E2]/10 flex items-center justify-center text-2xl">
                     🕒
@@ -142,7 +129,6 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Final CTA */}
         <div className="mt-16 sm:mt-20 text-center">
           <p className="text-gray-600 mb-4">Spreman za pronalazak savršenog internet paketa?</p>
           <a href="/pretraga" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-[#1E1B8F] text-white font-semibold hover:bg-[#2E2BA0] transition-all shadow-lg shadow-[#1E1B8F]/20 text-lg">

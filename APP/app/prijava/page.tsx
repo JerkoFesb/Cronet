@@ -1,4 +1,3 @@
-// app/prijava/page.tsx
 "use client";
 
 import { createAuthClient } from "better-auth/react";
@@ -8,17 +7,14 @@ import { useAuth } from "@/app/_providers/AuthProvider";
 
 const authClient = createAuthClient();
 
-// Debounce helper
 function useDebounce<T extends (...args: any[]) => any>(fn: T, delay: number) {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   
   return useCallback((...args: Parameters<T>) => {
-    // Cancel previous timeout
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    // Abort previous request
     if (abortRef.current) {
       abortRef.current.abort();
     }
@@ -30,7 +26,6 @@ function useDebounce<T extends (...args: any[]) => any>(fn: T, delay: number) {
   }, [fn, delay]);
 }
 
-// Normalize different error shapes into a readable message
 function extractMessage(err: any): string {
   if (!err) return "Pogreška.";
   if (typeof err === "string") return err;
@@ -47,20 +42,17 @@ function extractMessage(err: any): string {
       if (str !== undefined && str !== "{}") return str;
     }
   } catch (e) {
-    // fallthrough
   }
 
   try {
     const s = String(err);
     if (s && s !== "[object Object]") return s;
   } catch (e) {
-    // ignore
   }
 
   return "Pogreška.";
 }
 
-/* ===================== LOGIN ===================== */
 function LoginForm({ onSwitch, callback }: { onSwitch: () => void; callback?: string | null }) {
   const [isPending, startTransition] = useTransition();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -78,17 +70,14 @@ function LoginForm({ onSwitch, callback }: { onSwitch: () => void; callback?: st
   const [googleLoading, setGoogleLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  // Prefetch destination on mount for faster navigation
   const redirectUrl = callback || "/";
   useEffect(() => {
     router.prefetch(redirectUrl);
   }, [router, redirectUrl]);
 
-  // Pure validators (no state side-effects) used to enable/disable submit immediately
   const isEmailValid = (val: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
   const isPasswordValid = (val: string) => val.length >= 8;
 
-  // Validators that update visible error text (only set errors after blur/touch)
   const validateEmail = useCallback((val: string) => {
     const ok = isEmailValid(val);
     setEmailError(ok ? null : "Unesite valjan email.");
@@ -116,7 +105,6 @@ function LoginForm({ onSwitch, callback }: { onSwitch: () => void; callback?: st
     setIsSubmitting(true);
 
     try {
-      // Start navigation optimistically in parallel with auth
       const authPromise = authClient.signIn.email({
         email: emailVal,
         password: passVal,
@@ -133,10 +121,8 @@ function LoginForm({ onSwitch, callback }: { onSwitch: () => void; callback?: st
 
       const displayName = data?.user?.name || emailVal;
       
-      // Optimistic update - set user immediately before navigation
       setUser({ name: displayName, email: emailVal });
 
-      // Navigate immediately - route is already prefetched
       router.push(`${redirectUrl}?toast=loggedin&name=${encodeURIComponent(displayName)}`);
     } catch (err: any) {
       setError(new Error(extractMessage(err)));
@@ -229,14 +215,12 @@ function LoginForm({ onSwitch, callback }: { onSwitch: () => void; callback?: st
         {error && <p className="text-red-600 text-sm animate-shake" role="alert">{error.message}</p>}
       </form>
 
-      {/* Google divider */}
       <div className="flex items-center my-4">
         <div className="flex-1 border-t border-gray-300"></div>
         <span className="px-3 text-sm text-gray-500">ili</span>
         <div className="flex-1 border-t border-gray-300"></div>
       </div>
 
-      {/* Google sign-in */}
       <button
         type="button"
         disabled={isLoading}
@@ -280,7 +264,6 @@ function LoginForm({ onSwitch, callback }: { onSwitch: () => void; callback?: st
   );
 }
 
-/* ===================== REGISTER ===================== */
 function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
   const [isPending, startTransition] = useTransition();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -302,7 +285,6 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   
-  // Abort controller for canceling email check requests
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const validateUsername = useCallback((val: string) => {
@@ -322,7 +304,6 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
     return ok;
   }, []);
 
-  // Debounced email availability check
   const checkEmailAvailability = useCallback(async (val: string) => {
     const emailVal = val.trim().toLowerCase();
     if (!validateEmailFormat(emailVal)) {
@@ -331,7 +312,6 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
       return;
     }
     
-    // Cancel any pending request
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
@@ -353,7 +333,6 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
         }
       }
     } catch (e: any) {
-      // Ignore abort errors
       if (e.name !== 'AbortError') {
         console.error('Email check error:', e);
       }
@@ -362,7 +341,6 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
     }
   }, [validateEmailFormat]);
 
-  // Debounce the email check (300ms delay)
   const debouncedEmailCheck = useDebounce(checkEmailAvailability, 300);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -391,7 +369,6 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
     try {
       await authClient.signUp.email({ email: emailVal, password: passVal, name: uname });
       
-      // Optimistic update
       setUser({ name: uname, email: emailVal });
       
       startTransition(() => {
@@ -444,7 +421,6 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
                 setEmail(e.target.value); 
                 setEmailAvailable(null);
                 setEmailError(null);
-                // Trigger debounced check as user types
                 if (e.target.value.includes('@')) {
                   debouncedEmailCheck(e.target.value);
                 }
@@ -455,7 +431,6 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
               disabled={isLoading}
               className="w-full p-2 border rounded transition-colors focus:border-green-500 focus:ring-1 focus:ring-green-500 disabled:bg-gray-100 disabled:cursor-not-allowed pr-8"
             />
-            {/* Status indicator */}
             <div className="absolute right-2 top-1/2 -translate-y-1/2">
               {checkingEmail && (
                 <svg className="animate-spin h-4 w-4 text-gray-400" viewBox="0 0 24 24">
@@ -536,14 +511,12 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
         {error && <p className="text-red-600 text-sm" role="alert">{error.message}</p>}
       </form>
 
-      {/* Google divider */}
       <div className="flex items-center my-4">
         <div className="flex-1 border-t border-gray-300"></div>
         <span className="px-3 text-sm text-gray-500">ili</span>
         <div className="flex-1 border-t border-gray-300"></div>
       </div>
 
-      {/* Google sign-up */}
       <button
         type="button"
         disabled={isLoading}
@@ -587,7 +560,6 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
   );
 }
 
-/* ===================== PAGE ===================== */
 function PrijavaContent() {
   const [mode, setMode] = useState<"login" | "register">("login");
   const searchParams = useSearchParams();

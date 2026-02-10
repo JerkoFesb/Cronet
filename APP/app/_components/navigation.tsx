@@ -18,7 +18,6 @@ export function Navigation() {
   const [basePages, setBasePages] = useState<Page[]>([]);
   const [pagesLoading, setPagesLoading] = useState(true);
 
-  // Fetch navigation items from Sanity via API
   useEffect(() => {
     const fetchNavigation = async () => {
       try {
@@ -27,7 +26,6 @@ export function Navigation() {
         setBasePages(data.pages || [])
       } catch (error) {
         console.error('Failed to fetch navigation:', error)
-        // Fallback to empty array if CMS is down
         setBasePages([])
       } finally {
         setPagesLoading(false)
@@ -37,25 +35,20 @@ export function Navigation() {
     fetchNavigation()
   }, [])
 
-  // Use effect to sync pathname on client-side only to avoid hydration mismatch
   useEffect(() => {
     setCurrentPath(pathname);
   }, [pathname]);
 
-  // Close mobile menu when route changes
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [pathname]);
 
   const handleSignOut = async () => {
     try {
-      // Clear search state (form fields)
       if (typeof window !== "undefined") {
         sessionStorage.removeItem("pretraga-state");
-        // Keep chat messages in localStorage - don't delete them!
       }
       await signOut();
-      // show a signed-out toast on the homepage
       router.push(`/?toast=signedout`);
     } catch (e) {
       console.error("signOut error", e);
@@ -65,7 +58,6 @@ export function Navigation() {
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
-  // Memoized auth button component to prevent unnecessary re-renders
   const AuthButton = memo(function AuthButton({ 
     user, 
     loading, 
@@ -82,16 +74,13 @@ export function Navigation() {
   const isLoggedIn = user && (user.name || user.email);
   const displayName = user?.name ?? user?.email ?? '';
   
-  // Truncate long names
   const truncatedName = displayName.length > 12 
     ? displayName.slice(0, 12) + '...' 
     : displayName;
 
-  // Common button styles to ensure consistent sizing
   const desktopStyles = "px-4 lg:px-6 py-2.5 rounded-full text-sm lg:text-base font-medium min-w-[90px] lg:min-w-[100px] text-center";
   const mobileStyles = "w-full px-4 py-3 rounded-lg font-medium text-center";
 
-  // During SSR or initial load, show placeholder with same dimensions to prevent layout shift
   if (loading) {
     return (
       <div 
@@ -147,7 +136,6 @@ export function Navigation() {
           CroNet
         </Link>
 
-        {/* Mobile hamburger button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition"
@@ -164,7 +152,6 @@ export function Navigation() {
           )}
         </button>
 
-        {/* Desktop navigation */}
         <ul className="hidden md:flex space-x-2 items-center">
           {basePages.map((page, index) => {
             const isActive =
@@ -198,7 +185,6 @@ export function Navigation() {
         </ul>
       </div>
 
-      {/* Mobile navigation menu */}
       {mobileMenuOpen && (
         <div className="md:hidden mt-4 pt-4 border-t border-gray-100">
           <ul className="flex flex-col space-y-3">

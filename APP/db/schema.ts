@@ -1,7 +1,6 @@
 import { pgTable, text, timestamp, boolean, index, integer, real } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
-
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
@@ -9,7 +8,7 @@ export const user = pgTable("user", {
   emailVerified: boolean("email_verified").default(false),
   image: text("image"),
   createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(), // <-- OBAVEZNO
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 export const account = pgTable(
   "account",
@@ -62,30 +61,30 @@ export const verification = pgTable(
 
 export const provideri = pgTable("provideri", {
   id: text("id").primaryKey(),
-  providerName: text("provider_name").notNull(), // A1, HT, Telemach, Iskon, Evo
-  packageName: text("package_name").notNull(), // npr. "Optika 200", "MAX Speed 500"
-  city: text("city").notNull(), // Zagreb, Split, Rijeka, Osijek, itd.
-  region: text("region"), // Dalmacija, Slavonija, Istra, itd.
-  accessType: text("access_type").notNull(), // FTTH, DOCSIS, DSL, 5G, Fixed Wireless
+  providerName: text("provider_name").notNull(),
+  packageName: text("package_name").notNull(),
+  city: text("city").notNull(),
+  region: text("region"),
+  accessType: text("access_type").notNull(),
   downloadMbps: integer("download_mbps").notNull(),
   uploadMbps: integer("upload_mbps").notNull(),
-  latencyMs: integer("latency_ms").notNull(), // Prosječna latencija
-  jitterMs: integer("jitter_ms").notNull(), // Varijacija latencije
-  packetLossPercent: real("packet_loss_percent").notNull(), // npr. 0.1 = 0.1%
-  cgnat: boolean("cgnat").notNull(), // Carrier-Grade NAT (loše za gaming)
+  latencyMs: integer("latency_ms").notNull(),
+  jitterMs: integer("jitter_ms").notNull(),
+  packetLossPercent: real("packet_loss_percent").notNull(),
+  cgnat: boolean("cgnat").notNull(),
   ipv6Support: boolean("ipv6_support").notNull(),
-  priceEur: real("price_eur").notNull(), // Mjesečna cijena
-  installationFeeEur: real("installation_fee_eur").notNull(), // Jednokratna naknada
-  contractMonths: integer("contract_months").notNull(), // 0 = bez ugovorne obveze
-  dataLimitGB: integer("data_limit_gb"), // null = unlimited
-  tvIncluded: boolean("tv_included").default(false), // Da li uključuje TV
-  phoneIncluded: boolean("phone_included").default(false), // Da li uključuje telefon
-  routerIncluded: boolean("router_included").default(true), // Da li daju router
-  scoreGaming: integer("score_gaming").notNull(), // 1-10 ocjena za gaming
-  scoreStreaming: integer("score_streaming").notNull(), // 1-10 ocjena za streaming
-  scoreWork: integer("score_work").notNull(), // 1-10 ocjena za rad od kuće
-  scoreFamily: integer("score_family").notNull(), // 1-10 ocjena za obitelj
-  availability: text("availability").notNull(), // "excellent", "good", "limited", "poor"
+  priceEur: real("price_eur").notNull(),
+  installationFeeEur: real("installation_fee_eur").notNull(),
+  contractMonths: integer("contract_months").notNull(),
+  dataLimitGB: integer("data_limit_gb"),
+  tvIncluded: boolean("tv_included").default(false),
+  phoneIncluded: boolean("phone_included").default(false),
+  routerIncluded: boolean("router_included").default(true),
+  scoreGaming: integer("score_gaming").notNull(),
+  scoreStreaming: integer("score_streaming").notNull(),
+  scoreWork: integer("score_work").notNull(),
+  scoreFamily: integer("score_family").notNull(),
+  availability: text("availability").notNull(),
   promotionActive: boolean("promotion_active").default(false),
   promotionDescription: text("promotion_description"),
   websiteUrl: text("website_url"),

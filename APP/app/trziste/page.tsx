@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-// Provider brand colors/initials for visual identity
 const providerStyles: Record<string, { bg: string; text: string; initials: string }> = {
   "a1": { bg: "bg-[#2C2C2C]", text: "text-white", initials: "A1" },
   "ht": { bg: "bg-gradient-to-br from-pink-500 to-rose-500", text: "text-white", initials: "HT" },
@@ -98,7 +97,6 @@ export default function TrzistePage() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
-      {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="absolute top-0 right-0 -z-10 w-[500px] h-[500px] bg-blue-100 rounded-full blur-3xl opacity-40 translate-x-1/3 -translate-y-1/4" />
         <div className="absolute bottom-0 left-0 -z-10 w-[400px] h-[400px] bg-indigo-100 rounded-full blur-3xl opacity-40 -translate-x-1/3 translate-y-1/4" />
@@ -128,7 +126,6 @@ export default function TrzistePage() {
         </div>
       </section>
 
-      {/* Provider Cards Grid */}
       <section className="container mx-auto px-4 sm:px-6 md:px-10 pb-16 md:pb-24">
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6">
@@ -147,7 +144,6 @@ export default function TrzistePage() {
                     href={`/trziste/${provider.slug}`}
                     className="group bg-white rounded-2xl border border-slate-100 p-6 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-100/50 transition-all duration-300"
                   >
-                    {/* Header */}
                     <div className="flex items-center gap-4 mb-5">
                       <div
                         className={`h-14 w-14 rounded-xl ${style.bg} flex items-center justify-center ${style.text} font-bold text-lg shadow-sm group-hover:scale-110 transition-transform duration-300`}
@@ -169,7 +165,6 @@ export default function TrzistePage() {
                       )}
                     </div>
 
-                    {/* Quick Stats */}
                     <div className="grid grid-cols-2 gap-3 mb-5">
                       <div className="bg-slate-50 rounded-xl p-3">
                         <p className="text-xs text-slate-500 mb-0.5">Cijena od</p>
@@ -185,7 +180,6 @@ export default function TrzistePage() {
                       </div>
                     </div>
 
-                    {/* Technologies */}
                     <div className="flex flex-wrap gap-1.5 mb-4">
                       {provider.accessTypes.map((type) => (
                         <span
@@ -197,7 +191,6 @@ export default function TrzistePage() {
                       ))}
                     </div>
 
-                    {/* Scores */}
                     <div className="flex flex-wrap gap-1.5 mb-4">
                       <ScoreBadge label="🎮" score={provider.avgScores.gaming} />
                       <ScoreBadge label="📺" score={provider.avgScores.streaming} />
@@ -205,13 +198,11 @@ export default function TrzistePage() {
                       <ScoreBadge label="👨‍👩‍👧‍👦" score={provider.avgScores.family} />
                     </div>
 
-                    {/* Cities */}
                     <div className="text-xs text-slate-400">
                       📍 {provider.cities.slice(0, 4).join(", ")}
                       {provider.cities.length > 4 && ` +${provider.cities.length - 4}`}
                     </div>
 
-                    {/* CTA */}
                     <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between">
                       <span className="text-sm font-medium text-blue-600 group-hover:text-blue-700">
                         Saznaj više
@@ -231,7 +222,6 @@ export default function TrzistePage() {
               })}
         </div>
 
-        {/* Info section */}
         {!loading && providers.length > 0 && (
           <div className="mt-16 bg-white rounded-3xl border border-slate-100 p-8 md:p-12">
             <h2 className="text-2xl font-bold text-slate-900 mb-4">Kako odabrati pravog pružatelja?</h2>

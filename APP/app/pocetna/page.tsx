@@ -3,14 +3,8 @@ import Link from "next/link";
 export default function Page() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#E6F3FF] to-white">
-      {/* TEST BANNER */}
-      <div className="bg-red-600 text-white text-center py-4 text-2xl font-bold">
-        🔴 TEST - Promjena je vidljiva! 🔴
-      </div>
-      {/* Hero Section */}
       <main className="relative container mx-auto px-10 pt-16 pb-20 overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          {/* Left Side - Hero Content */}
           <div className="space-y-6">
             <div className="inline-block bg-[#D4E9FF] text-[#4A90E2] px-4 py-2 rounded-lg text-sm font-medium">
               Pametni izbor interneta
@@ -40,11 +34,9 @@ export default function Page() {
             </div>
           </div>
 
-          {/* Right Side - Top Offers Card */}
           <div className="bg-white rounded-2xl shadow-xl p-8 space-y-6">
             <h2 className="text-2xl font-bold text-gray-900 text-center">Top ponude</h2>
             
-            {/* T-HOME Offer */}
             <div className="border-2 border-gray-200 rounded-xl p-6 space-y-3 hover:border-[#4A90E2] transition">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
@@ -66,7 +58,6 @@ export default function Page() {
               </button>
             </div>
 
-            {/* VIP Offer */}
             <div className="border-2 border-gray-200 rounded-xl p-6 space-y-3 hover:border-[#4A90E2] transition">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
@@ -87,12 +78,10 @@ export default function Page() {
           </div>
         </div>
 
-        {/* Decorative circles in background */}
         <div className="absolute top-20 right-20 w-96 h-96 bg-[#D4E9FF] rounded-full opacity-30 blur-3xl -z-10"></div>
         <div className="absolute bottom-40 left-10 w-72 h-72 bg-[#D4E9FF] rounded-full opacity-40 blur-3xl -z-10"></div>
       </main>
 
-      {/* Footer */}
       <footer className="bg-[#A8C5E0] py-8 mt-20">
         <div className="container mx-auto px-10">
           <div className="flex justify-between items-center">

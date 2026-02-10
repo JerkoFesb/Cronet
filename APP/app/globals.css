@@ -12,22 +12,12 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* Dark mode disabled – app uses light-only design
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-*/
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Force light color scheme for all form controls */
 html {
   color-scheme: light only;
 }
@@ -85,7 +75,6 @@ input:-webkit-autofill:active {
   animation: chat-slide-up 0.3s ease-out forwards;
 }
 
-/* Accessibility: Visible focus states for keyboard navigation */
 *:focus-visible {
   outline: 2px solid #4A90E2 !important;
   outline-offset: 2px !important;
@@ -101,7 +90,6 @@ textarea:focus-visible {
   box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.2) !important;
 }
 
-/* Skip to main content link for screen readers */
 .skip-link {
   position: absolute;
   top: -40px;
