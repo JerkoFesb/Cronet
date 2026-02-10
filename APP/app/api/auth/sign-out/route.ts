@@ -56,7 +56,7 @@ export async function POST(req: Request) {
         return new Response(body, { status: (err as any).status || 500, headers: { 'content-type': 'application/json' } });
       }
     } catch (e) {
-
+    }
 
     const message = err?.message || String(err);
     const stack = err?.stack || null;
