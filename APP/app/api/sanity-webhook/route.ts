@@ -1,15 +1,21 @@
 import { NextResponse } from 'next/server'
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 
 export async function POST(req: Request) {
   try {
     const body = await req.json()
 
-    const docType = body?.document?._type
+    // Revalidate the sanity-live tag so SanityLive triggers router.refresh()
+    revalidateTag('sanity-live')
+
+    // Sanity GROQ webhooks send the document at root level, not nested under "document"
+    const docType = body?._type
+    const slug = body?.slug?.current || body?.slug
+
     if (docType === 'navigationItem') {
       try {
         revalidatePath('/api/navigation')
-        revalidatePath('/')
+        revalidatePath('/', 'layout')
       } catch (revalidateError) {
       }
       return NextResponse.json({ ok: true, type: 'navigationItem' })
@@ -18,8 +24,7 @@ export async function POST(req: Request) {
     if (docType === 'pageStatus') {
       try {
         revalidatePath('/api/page-status')
-        revalidatePath('/')
-        const slug = body?.document?.slug?.current
+        revalidatePath('/', 'layout')
         if (slug) {
           revalidatePath(`/${slug}`)
         }
@@ -27,8 +32,6 @@ export async function POST(req: Request) {
       }
       return NextResponse.json({ ok: true, type: 'pageStatus' })
     }
-
-    const slug = body?.document?.slug?.current || body?.slug
 
     if (!slug) {
       return NextResponse.json(
@@ -39,7 +42,7 @@ export async function POST(req: Request) {
 
     try {
       revalidatePath(`/${slug}`)
-      revalidatePath('/')
+      revalidatePath('/', 'layout')
     } catch (revalidateError) {
     }
 

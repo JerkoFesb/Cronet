@@ -19,23 +19,35 @@ export function PageStatusGuard({ slug, children }: PageStatusGuardProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
+
     const checkPageStatus = async () => {
       try {
         const res = await fetch('/api/page-status');
         const data = await res.json();
         const page = data.pages?.find((p: PageStatus) => p.slug === slug);
         
-        const enabled = page?.enabled === true;
-        setIsEnabled(enabled);
+        if (!cancelled) {
+          const enabled = page?.enabled === true;
+          setIsEnabled(enabled);
+        }
       } catch (error) {
         console.error('Failed to fetch page status:', error);
-        setIsEnabled(true);
+        if (!cancelled) setIsEnabled(true);
       } finally {
-        setIsLoading(false);
+        if (!cancelled) setIsLoading(false);
       }
     };
 
     checkPageStatus();
+
+    // Poll every 30 seconds to pick up Sanity changes
+    const interval = setInterval(checkPageStatus, 30_000);
+
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
   }, [slug]);
 
   if (isLoading) {

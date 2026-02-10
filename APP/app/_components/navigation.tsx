@@ -9,16 +9,33 @@ type Page = {
   path: `/${string}`;
 };
 
-export function Navigation() {
+interface NavigationProps {
+  serverPages?: { title: string; path: string }[];
+}
+
+export function Navigation({ serverPages }: NavigationProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { user, signOut, loading } = useAuth();
   const [currentPath, setCurrentPath] = useState<string | undefined>(undefined);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [basePages, setBasePages] = useState<Page[]>([]);
-  const [pagesLoading, setPagesLoading] = useState(true);
+  const [basePages, setBasePages] = useState<Page[]>(
+    (serverPages ?? []) as Page[]
+  );
+  const [pagesLoading, setPagesLoading] = useState(!serverPages?.length);
 
+  // Update pages when server data changes (e.g. after SanityLive triggers router.refresh)
   useEffect(() => {
+    if (serverPages?.length) {
+      setBasePages(serverPages as Page[]);
+      setPagesLoading(false);
+    }
+  }, [serverPages]);
+
+  // Fallback: fetch from API if no server pages provided
+  useEffect(() => {
+    if (serverPages?.length) return;
+
     const fetchNavigation = async () => {
       try {
         const res = await fetch('/api/navigation')
@@ -33,7 +50,7 @@ export function Navigation() {
     }
 
     fetchNavigation()
-  }, [])
+  }, [serverPages])
 
   useEffect(() => {
     setCurrentPath(pathname);
